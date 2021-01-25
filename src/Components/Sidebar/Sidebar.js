@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BiBasketball } from 'react-icons/bi';
 import { MdPeople, MdCompareArrows, MdSearch} from 'react-icons/md';
 import { VscGraph } from 'react-icons/vsc';
+import { ImEyedropper } from 'react-icons/im';
 import { IconContext } from 'react-icons/lib';
 
 const navIcons = [
@@ -43,16 +44,20 @@ function Sidebar() {
     return (
         <div className = "sidebar-container">
             <ul>    
-            { navIcons.map((item, index) => (
-                <IconContext.Provider value = {{color: 'white', size: '30px'}}>
+            <IconContext.Provider value = {{color: 'white', size: '30px'}}>
+                { navIcons.map((item, index) => (
                     <li className = 'listItems' key ={index}>
                         <Link to={item.path}>
                             {item.icon}
                             <p> {item.name}</p>
                         </Link>
                     </li>
+                ))}
+                    <li className = 'theme-button'>
+                        <ImEyedropper />
+                        <p> Change Theme </p>
+                    </li>
                 </IconContext.Provider>
-            ))}
             </ul>
         </div>
     )

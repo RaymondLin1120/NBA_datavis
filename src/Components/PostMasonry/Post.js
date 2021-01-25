@@ -7,8 +7,13 @@ function Post({post}) {
         ...post.style
     }
     return (
-        <a className = "post" style = {style} href = {post.path}>{post.heading}
-            <div className = 'post-image'></div>
+        <a className = "post" style = {style} href = {post.path}>
+            <div className = 'post-image'>
+                <div className = 'post-content'>
+                    <h3 className = 'post-heading'> {post.heading} </h3>
+                    <p className = 'post-desc'> Deserunt pariatur laboris mollit pariatur occaecat velit cupidatat eu in consequat consequat aliquip non. </p>
+                </div>
+            </div>
         </a>
     )
 }

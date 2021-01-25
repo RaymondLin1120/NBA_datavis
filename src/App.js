@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Sidebar from './Components/Sidebar/Sidebar'
 
 import Home from './Pages/Home'
+import Player from './Pages/Player'
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <div className="App">
           <Sidebar />
           <Switch>
-            <Route path='/' component = {Home} />
+            <Route exact path='/Home' component = {Home} />
+            <Route exact path='/Player' component = {Player} />
             <Route component={() => 404} />
           </Switch>  
       </div>

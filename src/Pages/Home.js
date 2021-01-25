@@ -8,7 +8,7 @@ const posts = [
         image: "player-background.jpg"
     },
     {
-        heading: "Team Stats",
+        heading: "Team Stats Comparison",
         path: "/",
         image: "nba-team.png"
     },
@@ -20,7 +20,7 @@ const posts = [
     {
         heading: "Team Stats",
         path: "/Team-Comparison",
-        image: "lakers.png"
+        image: "lakers.jpg"
     },
     {
         heading: "Shot Charting",
@@ -30,7 +30,7 @@ const posts = [
     {
         heading: "Fantasy Analysis",
         path: "/",
-        image: "box-score.png"
+        image: "box-score.jpg"
     },
 ]
 
