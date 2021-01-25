@@ -1,11 +1,13 @@
 import React from 'react'
 import NBA from 'nba'
 
-function Player() {
-    const curry = NBA.findPlayer('James Harden');
-    console.log(curry);
+const curry = NBA.findPlayer('James Harden');
+console.log(curry);
 
-    NBA.stats.playerProfile({ PlayerID: curry.playerId }).then(console.log)
+NBA.stats.playerProfile({ PlayerID: curry.playerId }).then(console.log)
+
+function Player() {
+
     return (
         <div>
             <p>test</p>
