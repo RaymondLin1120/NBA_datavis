@@ -1,12 +1,13 @@
-import React from 'react'
-import NBA from 'nba'
-
-const curry = NBA.findPlayer('James Harden');
-console.log(curry);
-
-NBA.stats.playerProfile({ PlayerID: curry.playerId }).then(console.log)
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
 function Player() {
+    useEffect(() => {
+        axios.get("http://localhost:8080/player")
+        .then((data) => {
+            console.log(data);
+        })
+    }, []);
 
     return (
         <div>
