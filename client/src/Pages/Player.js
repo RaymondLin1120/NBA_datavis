@@ -3,7 +3,6 @@ import axios from 'axios';
 import RadarStats from '../Components/Graphing/RadarStats'
 
 function Player() {
-    const [playerData, setPlayerData] = useState([])
     const [seasonStats, setSeasonStats] = useState([])
     
     // const fields = [min, fGPct, pg3Pct]
@@ -21,32 +20,28 @@ function Player() {
     useEffect(() => {
         axios.get("http://localhost:8080/player")
         .then((data) => {
-            
-            setPlayerData(data)
-
-            setSeasonStats(data.data.seasonTotalsRegularSeason)
-            // setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
-            //     item.seasonId === "2020-21" && 
-            //     item.teamAbbreviation === "TOT"
-            // )[0])
+            setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
+                (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
+                item.seasonId !== "2020-21"
+            ))
         })
     }, []);
 
-    const arr = [
-        {
-            fgPct:{subject:"Field-Goal-%"},
-            //pg3Pct:{subject:"3s-%"},
-            ftPct:{subject:"Free-Throw-%"},
-            fG3M:{subject:"3s-%"},
-            pts:{subject:"Points"},
-            min:{subject:"Minutes"},
-            reb:{subject:"Rebounds"},
-            ast:{subject:"Assists"},
-            stl:{subject:"Steals"},
-            blk:{subject:"Blocks"},
-            tov:{subject:"Turnovers"}
-        }   
-    ]
+    // const arr = [
+    //     {
+    //         fgPct:{subject:"Field-Goal-%"},
+    //         //pg3Pct:{subject:"3s-%"},
+    //         ftPct:{subject:"Free-Throw-%"},
+    //         fG3M:{subject:"3s-%"},
+    //         pts:{subject:"Points"},
+    //         min:{subject:"Minutes"},
+    //         reb:{subject:"Rebounds"},
+    //         ast:{subject:"Assists"},
+    //         stl:{subject:"Steals"},
+    //         blk:{subject:"Blocks"},
+    //         tov:{subject:"Turnovers"}
+    //     }   
+    // ]
 
     //console.log(Object.keys(seasonStats[0]))
 
@@ -62,13 +57,14 @@ function Player() {
     //     arr[0].blk[item.seasonId] = item.blk,
     //     arr[0].tov[item.seasonId] = item.tov
     // ))
-     var temp_arr = []
+
+    var temp_arr = []
     // for (const [key, value] of Object.entries(arr[0])) {
     //     console.log(`key: ${key}, value: ${value}`)
     //     // temp_arr.push(arr[`${key}`])
     //     temp_arr.push(arr[0][`${key}`])
     // }
-    console.log(seasonStats)
+    //console.log(seasonStats)
     seasonStats.map((item) => (
         temp_arr.push({
             seasonId: item.seasonId,
@@ -86,9 +82,10 @@ function Player() {
     ))
 
     console.log(temp_arr)
+
     return (
         <div>
-            {/* <RadarStats /> */}
+            <RadarStats config = {temp_arr}/>
         </div>
     )
 }
