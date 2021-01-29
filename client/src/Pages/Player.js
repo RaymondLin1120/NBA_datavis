@@ -85,7 +85,7 @@ function Player() {
 
     return (
         <div>
-            <RadarStats config = {temp_arr}/>
+            <RadarStats config = {temp_arr.slice(temp_arr.length - 3, temp_arr.length)}/>
         </div>
     )
 }
