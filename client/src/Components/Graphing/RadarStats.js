@@ -1,22 +1,22 @@
+import { getCoordinateSystemDimensions } from 'echarts';
 import React from 'react'
 import Chart from './Chart'
 import EChart from './EChart.js'
 
 function RadarStats({ config, resize }) {
     //const { data } = config
-    
-    var temp_arr = []
-    config.map((item) => (
-        temp_arr.push(item.seasonId)
-    ))
 
     let option = {
       title: {
           text: 'Player Stats'
       },
-      tooltip: {},
+      tooltip: {
+        //   axisPointer : {
+        //       type:'cross'
+        //   }
+      },
       legend: {
-          data:temp_arr
+          data: config['seasonId']
       },
       radar: {
           // shape: 'circle',
@@ -48,13 +48,7 @@ function RadarStats({ config, resize }) {
             }))
       }]
   };
-//   console.log(JSON.stringify(config))
-//   console.log(config['seasonId'])
-config.map((item) => (console.log({
-    value: [item.pts, item.reb, item.ast, item.stl, item.blk, item.tov], 
-    name: item.seasonId
-})))
-console.log(temp_arr)
+
   return (
         // <Chart config={config} resize={resize}>
         //     { data &&
