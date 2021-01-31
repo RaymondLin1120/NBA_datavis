@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import RadarStats from '../Components/Graphing/RadarStats'
+import ReactEcharts from 'echarts-for-react';
 
 function Player() {
     const [playerData, setPlayerData] = useState([])
@@ -22,15 +22,25 @@ function Player() {
         axios.get("http://localhost:8080/player")
         .then((data) => {
             
-            setPlayerData(data)
+            //setPlayerData(data)
 
-            setSeasonStats(data.data.seasonTotalsRegularSeason)
+            //setSeasonStats(data.data.seasonTotalsRegularSeason)
             // setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
             //     item.seasonId === "2020-21" && 
             //     item.teamAbbreviation === "TOT"
             // )[0])
         })
     }, []);
+
+    function renderChart() {
+        setTimeout(() => {
+            return <ReactEcharts 
+            notMerge={true}
+            lazyUpdate={true}
+            theme={"theme_name"}
+            />
+        }, 1000);
+    }
 
     const arr = [
         {
@@ -88,7 +98,7 @@ function Player() {
     console.log(temp_arr)
     return (
         <div>
-            {/* <RadarStats /> */}
+            { renderChart() }
         </div>
     )
 }

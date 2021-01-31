@@ -11,8 +11,10 @@ function App() {
       <div className="App">
           <Sidebar />
           <Switch>
-            <Route exact path='/Home' component = {Home} />
-            <Route exact path='/Player' component = {Player} />
+            <Route exact path='/Home' component = {Home}></Route>
+            <Route exact path='/Player'>
+              <Player />
+            </Route>
             <Route component={() => 404} />
           </Switch>  
       </div>
