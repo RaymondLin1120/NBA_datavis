@@ -1,34 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../Components/Graphing/RadarStats'
 
-function Player() {
+
+const Player_Query = gql`
+    query PlayerQuery {
+        historicStats {
+            seasonId
+            pts
+            reb
+            ast
+            fG3M
+            stl
+            blk
+        }
+    }
+`
+
+const Player = () => {
+    const { loading, error, data } = useQuery(Player_Query);
+  
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+    if (error) {
+      console.error(error);
+      return <div>Error!</div>;
+    }
+    return <PlayerPage data={data.historicStats} />;
+  };
+
+function PlayerPage(props) {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerStats, setPlayerStats] = useState([])
     
-    // const fields = [min, fGPct, pg3Pct]
-    // min,
-    // fGPct,
-    // pg3Pct,
-    // ftPct,
-    // fG3M,
-    // pts,
-    // reb,
-    // ast,
-    // stl,
-    // blk,
-    // tov
-    useEffect(() => {
-        axios.get("http://localhost:8080/player")
-        .then((data) => {
-            setPlayerStats(data.data)
-            // setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
-            //     (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
-            //      item.seasonId !== "2020-21"
-            // ))
-        })
-    }, []);
-    // console.log(playerStats)
+    // useEffect(() => {
+    //     axios.get("http://localhost:8080/player")
+    //     .then((data) => {
+    //         setPlayerStats(data.data)
+    //         // setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
+    //         //     (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
+    //         //      item.seasonId !== "2020-21"
+    //         // ))
+    //     })
+    //  }, []);
     // // const arr = [
     // //     {
     // //         fgPct:{subject:"Field-Goal-%"},

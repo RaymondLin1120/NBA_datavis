@@ -5,43 +5,41 @@ const {
     GraphQLInt,
     GraphQLList,
     GraphQLSchema,
-    GraphQLNonNull
-} = require('graphql');
+    } = require('graphql');
 
 const nba = require('nba');
 
 const curry = nba.findPlayer('Stephen Curry');
 const TeamID = nba.teamIdFromName("HOU");
 
-nba.stats.playerInfo({ PlayerID: curry.playerId }).then((data) => console.log(data));
-
 const HistoricStats= new GraphQLObjectType({
     name:'historicStats',
     fields: () => ({
-        playerId: { type: GraphQLNonNull(GraphQLInt) },
-        teamId: { type: GraphQLNonNull(GraphQLInt) },
-        teamAbbreviation: { type: GraphQLNonNull(GraphQLString) },
-        seasonId: { type: GraphQLNonNull(GraphQLString)},
-        teamAbbreviation: { type: GraphQLNonNull(GraphQLString)},
-        playerAge: { type: GraphQLNonNull(GraphQLInt)},
-        gp: { type: GraphQLNonNull(GraphQLInt)},
-        fgm: { type: GraphQLNonNull(GraphQLFloat)},
-        fga: { type: GraphQLNonNull(GraphQLInt)},
-        fGPct: { type: GraphQLNonNull(GraphQLFloat) },
-        fG3A: { type: GraphQLNonNull(GraphQLFloat) },
-        pg3Pct: { type: GraphQLNonNull(GraphQLFloat) } ,
-        fG3M: { type: GraphQLNonNull(GraphQLFloat) },
-        ftPct3M: { type: GraphQLNonNull(GraphQLFloat) },
-        fta: { type: GraphQLNonNull(GraphQLFloat) },
-        ftm: { type: GraphQLNonNull(GraphQLFloat) },
-        pts: { type: GraphQLNonNull(GraphQLFloat) },
-        reb: { type: GraphQLNonNull(GraphQLFloat) },
-        oreb: { type: GraphQLNonNull(GraphQLFloat) },
-        dreb: { type: GraphQLNonNull(GraphQLFloat) },
-        ast: { type: GraphQLNonNull(GraphQLFloat) },
-        blks: { type: GraphQLNonNull(GraphQLFloat) },
-        tov: { type: GraphQLNonNull(GraphQLFloat) },
-        min: { type: GraphQLNonNull(GraphQLFloat) }
+        playerId: { type: GraphQLInt },
+        teamId: { type: GraphQLInt },
+        teamAbbreviation: { type: GraphQLString },
+        seasonId: { type: GraphQLString },
+        teamAbbreviation: { type: GraphQLString },
+        playerAge: { type: GraphQLInt },
+        gp: { type: GraphQLInt },
+        fgm: { type: GraphQLFloat },
+        fga: { type: GraphQLInt },
+        fGPct: { type: GraphQLFloat },
+        fG3A: { type: GraphQLFloat },
+        pg3Pct: { type: GraphQLFloat },
+        fG3M: { type: GraphQLFloat },
+        ftPct3M: { type: GraphQLFloat },
+        fta: { type: GraphQLFloat },
+        ftm: { type: GraphQLFloat },
+        pts: { type: GraphQLFloat },
+        reb: { type: GraphQLFloat },
+        oreb: { type: GraphQLFloat },
+        dreb: { type: GraphQLFloat },
+        ast: { type: GraphQLFloat },
+        stl: { type: GraphQLFloat },
+        blk: { type: GraphQLFloat },
+        tov: { type: GraphQLFloat },
+        min: { type: GraphQLFloat }
     })
 });
 
@@ -213,6 +211,84 @@ const TeamShooting = new GraphQLObjectType({
         fg3Pct:{ type: GraphQLFloat }
     })
 })
+
+const TeamStats = new GraphQLObjectType({
+    name: 'teamStats',
+    fields: () => ({
+        teamId:{ type: GraphQLInt },
+        teamName:{ type: GraphQLString },
+        gp:{ type: GraphQLInt },
+        w:{ type: GraphQLInt },
+        l:{ type: GraphQLInt },
+        wPct:{ type: GraphQLFloat },
+        min:{ type: GraphQLFloat },
+        fgm:{ type: GraphQLFloat },
+        fga:{ type: GraphQLFloat },
+        fgPct:{ type: GraphQLFloat },
+        fG3M:{ type: GraphQLFloat },
+        fG3A:{ type: GraphQLFloat },
+        fg3Pct:{ type: GraphQLFloat },
+        ftm:{ type: GraphQLFloat },
+        fta:{ type: GraphQLFloat },
+        ftPct:{ type: GraphQLFloat },
+        oreb:{ type: GraphQLFloat },
+        dreb:{ type: GraphQLFloat },
+        reb:{ type: GraphQLFloat },
+        ast:{ type: GraphQLFloat },
+        tov:{ type: GraphQLFloat },
+        stl:{ type: GraphQLFloat },
+        blk:{ type: GraphQLFloat },
+        blka:{ type: GraphQLFloat },
+        pf:{ type: GraphQLFloat },
+        pfd:{ type: GraphQLFloat },
+        pts:{ type: GraphQLFloat },
+        plusMinus:{ type: GraphQLFloat },
+        gpRank:{ type: GraphQLInt },
+        wRank:{ type: GraphQLInt },
+        lRank:{ type: GraphQLInt },
+        wPctRank:{ type: GraphQLInt },
+        minRank:{ type: GraphQLInt },
+        fgmRank:{ type: GraphQLInt },
+        fgaRank:{ type: GraphQLInt },
+        fgPctRank:{ type: GraphQLInt },
+        fg3mRank:{ type: GraphQLInt },
+        fg3aRank:{ type: GraphQLInt },
+        fg3PctRank:{ type: GraphQLInt },
+        ftmRank:{ type: GraphQLInt },
+        ftaRank:{ type: GraphQLInt },
+        ftPctRank:{ type: GraphQLInt },
+        orebRank:{ type: GraphQLInt },
+        drebRank:{ type: GraphQLInt },
+        rebRank:{ type: GraphQLInt },
+        astRank:{ type: GraphQLInt },
+        tovRank:{ type: GraphQLInt },
+        stlRank:{ type: GraphQLInt },
+        blkRank:{ type: GraphQLInt },
+        blkaRank:{ type: GraphQLInt },
+        pfRank:{ type: GraphQLInt },
+        pfdRank:{ type: GraphQLInt },
+        ptsRank:{ type: GraphQLInt },
+        plusMinusRank:{ type: GraphQLInt },
+        cfid:{ type: GraphQLInt },
+        cfparams:{ type: GraphQLString }
+    })
+})
+
+const leagueLeaders = new GraphQLObjectType({
+    name: "LeagueLeaders",
+    fields: () => ({
+        resource: { type: GraphQLString }
+        //headers: { type: GraphQLString }
+    })
+})
+
+// const leagueLeadersHeader = new GraphQLObjectType({
+//     name: "LeagueLeadersHeader",
+//     fields: () => ({
+//         name: { type: GraphQLString },
+//         headers: { type: GraphQLList }
+//     })
+// })
 // const Rankings = new GraphQLObjectType({
 //     name: 'Rankings',
 //     fields: () => ({
@@ -269,14 +345,22 @@ const RootQuery = new GraphQLObjectType({
         teamShooting: {
             type: new GraphQLList(TeamShooting),
             resolve: () => nba.stats.teamShooting({TeamID: TeamID}).then((data) => data['leagueDashPTShots'])
+        },
+        teamStats: {
+            type: new GraphQLList(TeamStats),
+            resolve: () => nba.stats.teamStats().then((data) => data)
         }
-
+        // leagueLead: {
+        //     type: new GraphQLList(leagueLeaders),
+        //     resolve: () => nba.stats.leagueLeaders().then((data) => data)
+        // }
         // rankings: {
         //     type: new GraphQLList(Rankings),
         //     resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data["seasonRankingsRegulatSeason"])
         // }
     })
 })
+nba.stats.leagueLeaders().then((data) => console.log(data));
 
 module.exports = new GraphQLSchema({
     query: RootQuery
