@@ -1,76 +1,61 @@
-// import React from 'react';
-// import ReactEcharts from 'echarts-for-react';
+import { getCoordinateSystemDimensions } from 'echarts';
+import React from 'react'
+import Chart from './Chart'
+import EChart from './EChart.js'
 
-// function RadarStats() {
-//     return (
-//       <div className='examples'>
-//         <div className='parent'>
-//           <label> render a Simple echart With <strong>option and height</strong>: </label>
-//           <ReactEcharts
-//             option={{
-//               title: {
-//                 text: '堆叠区域图'
-//               },
-//               tooltip : {
-//                 trigger: 'axis'
-//               },
-//               legend: {
-//                 data:['邮件营销','联盟广告','视频广告']
-//               },
-//               toolbox: {
-//                 feature: {
-//                   saveAsImage: {}
-//                 }
-//               },
-//               grid: {
-//                 left: '3%',
-//                 right: '4%',
-//                 bottom: '3%',
-//                 containLabel: true
-//               },
-//               xAxis : [
-//                 {
-//                   type : 'category',
-//                   boundaryGap : false,
-//                   data : ['周一','周二','周三','周四','周五','周六','周日']
-//                 }
-//               ],
-//               yAxis : [
-//                 {
-//                   type : 'value'
-//                 }
-//               ],
-//               series : [
-//                 {
-//                   name:'邮件营销',
-//                   type:'line',
-//                   stack: '总量',
-//                   areaStyle: {normal: {}},
-//                   data:[120, 132, 101, 134, 90, 230, 210]
-//                 },
-//                 {
-//                   name:'联盟广告',
-//                   type:'line',
-//                   stack: '总量',
-//                   areaStyle: {normal: {}},
-//                   data:[220, 182, 191, 234, 290, 330, 310]
-//                 },
-//                 {
-//                   name:'视频广告',
-//                   type:'line',
-//                   stack: '总量',
-//                   areaStyle: {normal: {}},
-//                   data:[150, 232, 201, 154, 190, 330, 410]
-//                 }
-//               ]
-//             }}
-//             style={{height: '350px', width: '100%'}}
-//             className='react_for_echarts' />
-//           <label> code below: </label>
-//         </div>
-//       </div>
-//   )
-// }
-// // render echarts option.
+function RadarStats({ config, resize }) {
+    //const { data } = config
 
-// export default RadarStats;
+    let option = {
+      title: {
+          text: 'Player Stats'
+      },
+      tooltip: {
+        //   axisPointer : {
+        //       type:'cross'
+        //   }
+      },
+      legend: {
+          data: config['seasonId']
+      },
+      radar: {
+          // shape: 'circle',
+          name: {
+              textStyle: {
+                  color: '#fff',
+                  backgroundColor: '#999',
+                  borderRadius: 3,
+                  padding: [3, 5]
+              }
+          },
+          indicator: [
+              { name: 'Points', max: 40},
+              { name: 'Rebounds', max: 15},
+              { name: 'Assists', max: 15},
+              { name: 'Steals', max: 5},
+              { name: 'Blocks', max: 5},
+              { name: 'Turnovers', max: 7}
+          ]
+      },
+      series: [{
+        axisName: 'James Harden Average',
+        type: 'radar',
+        //areaStyle: {normal: {}},
+        data: 
+            config.map((item) => ({
+                value: [item.pts, item.reb, item.ast, item.stl, item.blk, item.tov], 
+                name: item.seasonId
+            }))
+      }]
+  };
+
+  return (
+        // <Chart config={config} resize={resize}>
+        //     { data &&
+                <EChart option={ option } resize={resize}/>
+        //     }
+        // </Chart>
+    )
+}
+  
+  export default RadarStats

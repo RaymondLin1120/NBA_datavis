@@ -6,17 +6,18 @@ const nba = require('nba');
 function getPlayer(name) {
     return new Promise((resolve, reject) => {
         const player = nba.findPlayer(name);
-
-        nba.stats.playerProfile({ PlayerID: player.playerId})
+        const teamID = nba.teamIdFromName("HOU")
+        //nba.stats.playerInfo({ PlayerID: player.playerId})
+        nba.stats.leagueLeaders()
         .then((data) => {
             resolve(data);
+            console.log(data)
         })
         .catch((err) => {
             reject(err);
         })
     })
 }
-
 playerRoutes.get('/', (req, res) => {
     getPlayer("James Harden")
     .then((data) => {
