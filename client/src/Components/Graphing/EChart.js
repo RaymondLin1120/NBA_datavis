@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import * as echarts from 'echarts'
 
-export default function EChart ({option, resize}) {
+export default function EChart ({option, resize, style}) {
     let chart = useRef(null)
     let [chartState, setChartState] = useState(chart)
 
@@ -17,6 +17,6 @@ export default function EChart ({option, resize}) {
         }
     }, [option, chartState, resize])
     return (
-        <div ref={chart} style ={{height:'400px', width:'500px'}}></div>
+        <div ref={chart} style = {{...style, padding: "20px"}}></div>
     )
 }

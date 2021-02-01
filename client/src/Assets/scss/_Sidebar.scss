@@ -3,11 +3,12 @@
     height:100vh;
     display:flex;
     flex-direction:column;
-    box-shadow: 10px 5;
-    // background-color:#bf5af2;
+    box-shadow: 10px;
+    overflow:hidden;    // background-color:#bf5af2;
     background-color:#111111;
     box-shadow: 2px 1px 7px #888888;
     justify-content: center;
+
     ul {
         list-style-type: none;
         margin:0;
