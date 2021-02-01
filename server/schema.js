@@ -4,13 +4,17 @@ const {
     GraphQLString,
     GraphQLInt,
     GraphQLList,
-    GraphQLSchema,
+    GraphQLSchema, 
+    GraphQLScalarType,
+    GraphQLJSON
     } = require('graphql');
 
 const nba = require('nba');
 
+// Test Data
 const curry = nba.findPlayer('Stephen Curry');
 const TeamID = nba.teamIdFromName("HOU");
+const GameID = "0021401082";
 
 const HistoricStats= new GraphQLObjectType({
     name:'historicStats',
@@ -282,6 +286,18 @@ const leagueLeaders = new GraphQLObjectType({
     })
 })
 
+
+const boxScoreRowSet = new GraphQLList(GraphQLString);
+
+const BoxScores = new GraphQLObjectType({
+    name: "boxScores",
+    fields: () => ({
+        name: { type: GraphQLString },
+        headers: { type: new GraphQLList(GraphQLString) },
+        rowSet: { type: new GraphQLList(boxScoreRowSet) }
+    })
+})
+
 // const leagueLeadersHeader = new GraphQLObjectType({
 //     name: "LeagueLeadersHeader",
 //     fields: () => ({
@@ -349,6 +365,10 @@ const RootQuery = new GraphQLObjectType({
         teamStats: {
             type: new GraphQLList(TeamStats),
             resolve: () => nba.stats.teamStats().then((data) => data)
+        },
+        boxScores: {
+            type: new GraphQLList(BoxScores),
+            resolve: () => nba.stats.boxScore({ GameID: GameID }).then((data) => data['resultSets'])
         }
         // leagueLead: {
         //     type: new GraphQLList(leagueLeaders),
@@ -360,7 +380,9 @@ const RootQuery = new GraphQLObjectType({
         // }
     })
 })
-nba.stats.leagueLeaders().then((data) => console.log(data));
+//nba.stats.leagueLeaders().then((data) => console.log(data));
+//nba.stats.playerProfile({ PlayerID: curry.playerId}).then((data) => console.log(data)).catch(err => console.log(err));
+nba.stats.boxScore({ GameID: GameID }).then(data => console.log(data['resultSets'])).catch(err => console.log(err));
 
 module.exports = new GraphQLSchema({
     query: RootQuery

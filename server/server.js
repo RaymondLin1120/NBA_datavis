@@ -29,5 +29,5 @@ app.use('/graphql', graphqlHTTP({
 const HTTP_PORT = process.env.PORT || 8080;
 
 app.listen(HTTP_PORT, () => {
-    console.log("Sever running on port " + HTTP_PORT)
+    console.log("Server running on port " + HTTP_PORT)
 })
