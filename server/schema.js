@@ -278,33 +278,54 @@ const TeamStats = new GraphQLObjectType({
     })
 })
 
-const leagueLeaders = new GraphQLObjectType({
-    name: "LeagueLeaders",
-    fields: () => ({
-        resource: { type: GraphQLString }
-        //headers: { type: GraphQLString }
-    })
-})
-
-
-const boxScoreRowSet = new GraphQLList(GraphQLString);
+const rowSetSchema = new GraphQLList(GraphQLString);
+const nbaResultSetSchema = {
+    name: { type: GraphQLString },
+    headers: { type: new GraphQLList(GraphQLString) },
+    rowSet: { type: new GraphQLList(rowSetSchema) }
+}
 
 const BoxScores = new GraphQLObjectType({
     name: "boxScores",
+    fields: () => (nbaResultSetSchema)
+})
+
+const leagueLeadersHeader = new GraphQLObjectType({
+    name: "LeagueLeadersHeader",
     fields: () => ({
         name: { type: GraphQLString },
-        headers: { type: new GraphQLList(GraphQLString) },
-        rowSet: { type: new GraphQLList(boxScoreRowSet) }
+        headers: { type: GraphQLList }
     })
 })
 
-// const leagueLeadersHeader = new GraphQLObjectType({
-//     name: "LeagueLeadersHeader",
-//     fields: () => ({
-//         name: { type: GraphQLString },
-//         headers: { type: GraphQLList }
-//     })
-// })
+const leagueLeadersParameters = {
+    name: "leagueLeadersParameters",
+    fields: () => ({
+        LeagueID: { type: GraphQLString },
+        PerMode: { type: GraphQLString },
+        StatCategory: { type: GraphQLString },
+        Season: { type: GraphQLString },
+        SeasonType: { type: GraphQLString },
+        Scope: { type: GraphQLString },
+        ActiveFlag: { type: GraphQLString }
+    })
+}
+
+const leagueLeadersResultSet = {
+    name: "leagueLeadersResultSet",
+    fields: () => (nbaResultSetSchema)
+}
+
+const leagueLeaders = new GraphQLObjectType({
+    name: "LeagueLeaders",
+    fields: () => ({
+        resource: { type: GraphQLString },
+        parameters: { type: new GraphQLObjectType(leagueLeadersParameters) },
+        resultSet: { type: new GraphQLObjectType(leagueLeadersResultSet) }
+    })
+})
+
+
 // const Rankings = new GraphQLObjectType({
 //     name: 'Rankings',
 //     fields: () => ({
@@ -369,11 +390,11 @@ const RootQuery = new GraphQLObjectType({
         boxScores: {
             type: new GraphQLList(BoxScores),
             resolve: () => nba.stats.boxScore({ GameID: GameID }).then((data) => data['resultSets'])
-        }
-        // leagueLead: {
-        //     type: new GraphQLList(leagueLeaders),
-        //     resolve: () => nba.stats.leagueLeaders().then((data) => data)
-        // }
+        },
+        leagueLead: {
+            type: leagueLeaders,
+            resolve: () => nba.stats.leagueLeaders().then((data) => data)
+        },
         // rankings: {
         //     type: new GraphQLList(Rankings),
         //     resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data["seasonRankingsRegulatSeason"])
@@ -382,7 +403,7 @@ const RootQuery = new GraphQLObjectType({
 })
 //nba.stats.leagueLeaders().then((data) => console.log(data));
 //nba.stats.playerProfile({ PlayerID: curry.playerId}).then((data) => console.log(data)).catch(err => console.log(err));
-nba.stats.boxScore({ GameID: GameID }).then(data => console.log(data['resultSets'])).catch(err => console.log(err));
+nba.stats.leagueLeaders().then(data => console.log(data)).catch(err => console.log(err));
 
 module.exports = new GraphQLSchema({
     query: RootQuery

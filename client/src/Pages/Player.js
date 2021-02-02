@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
-import axios from 'axios';
-import ReactEcharts from 'echarts-for-react';
-=======
 import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../Components/Graphing/RadarStats'
->>>>>>> fa030e2ec3cbbc3add0e4a6ad03c8dd6ee765381
 
 
 const Player_Query = gql`
@@ -39,59 +34,6 @@ function PlayerPage(props) {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerStats, setPlayerStats] = useState([])
     
-<<<<<<< HEAD
-    // const fields = [min, fGPct, pg3Pct]
-    // min,
-    // fGPct,
-    // pg3Pct,
-    // ftPct,
-    // fG3M,
-    // pts,
-    // reb,
-    // ast,
-    // stl,
-    // blk,
-    // tov
-    useEffect(() => {
-        axios.get("http://localhost:8080/player")
-        .then((data) => {
-            
-            //setPlayerData(data)
-
-            //setSeasonStats(data.data.seasonTotalsRegularSeason)
-            // setSeasonStats(data.data.seasonTotalsRegularSeason.filter((item) =>
-            //     item.seasonId === "2020-21" && 
-            //     item.teamAbbreviation === "TOT"
-            // )[0])
-        })
-    }, []);
-
-    function renderChart() {
-        setTimeout(() => {
-            return <ReactEcharts 
-            notMerge={true}
-            lazyUpdate={true}
-            theme={"theme_name"}
-            />
-        }, 1000);
-    }
-
-    const arr = [
-        {
-            fgPct:{subject:"Field-Goal-%"},
-            //pg3Pct:{subject:"3s-%"},
-            ftPct:{subject:"Free-Throw-%"},
-            fG3M:{subject:"3s-%"},
-            pts:{subject:"Points"},
-            min:{subject:"Minutes"},
-            reb:{subject:"Rebounds"},
-            ast:{subject:"Assists"},
-            stl:{subject:"Steals"},
-            blk:{subject:"Blocks"},
-            tov:{subject:"Turnovers"}
-        }   
-    ]
-=======
     // useEffect(() => {
     //     axios.get("http://localhost:8080/player")
     //     .then((data) => {
@@ -132,7 +74,6 @@ function PlayerPage(props) {
     // //     arr[0].blk[item.seasonId] = item.blk,
     // //     arr[0].tov[item.seasonId] = item.tov
     // // ))
->>>>>>> fa030e2ec3cbbc3add0e4a6ad03c8dd6ee765381
 
     // var temp_arr = []
     // // for (const [key, value] of Object.entries(arr[0])) {
@@ -161,11 +102,7 @@ function PlayerPage(props) {
 
     return (
         <div>
-<<<<<<< HEAD
-            { renderChart() }
-=======
             {/* <RadarStats config = {temp_arr.slice(temp_arr.length - 3, temp_arr.length)}/> */}
->>>>>>> fa030e2ec3cbbc3add0e4a6ad03c8dd6ee765381
         </div>
     )
 }
