@@ -8,7 +8,7 @@ function getPlayer(name) {
         const player = nba.findPlayer(name);
         const teamID = nba.teamIdFromName("HOU")
         //nba.stats.playerInfo({ PlayerID: player.playerId})
-        nba.stats.leagueLeaders()
+        nba.stats.scoreboard({ gameDate: "02/01/2021"})
         .then((data) => {
             resolve(data);
             console.log(data)
