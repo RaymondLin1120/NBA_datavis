@@ -393,13 +393,13 @@ const Scoreboard = new GraphQLObjectType({
     })
 })
 
-const leagueLeadersHeader = new GraphQLObjectType({
+/* const leagueLeadersHeader = new GraphQLObjectType({
     name: "LeagueLeadersHeader",
     fields: () => ({
         name: { type: GraphQLString },
         headers: { type: GraphQLList }
     })
-})
+}) */
 
 const leagueLeadersParameters = {
     name: "leagueLeadersParameters",
@@ -428,6 +428,34 @@ const leagueLeaders = new GraphQLObjectType({
     })
 })
 
+const leagueGameLogResultSet = new GraphQLObjectType({
+    name: "leagueGameLogResultSet",
+    fields: () => (nbaResultSetSchema)
+})
+
+const leagueGameLogParameters = new GraphQLObjectType({
+    name: "leagueGameLogParameters",
+    fields: () => ({
+        LeagueID: { type: GraphQLString },
+        Season: { type: GraphQLString },
+        SeasonType: { type: GraphQLString },
+        PlayerOrTeam: { type: GraphQLString },
+        Counter: { type: GraphQLInt },
+        Sorter: { type: GraphQLString },
+        Direction: { type: GraphQLString },
+        DateFrom: { type: GraphQLString },
+        DateTo: { type: GraphQLString },       
+    })
+})
+
+const LeagueGameLog = {
+    name: "leagueGameLog",
+    fields: () => ({
+        resource: { type: GraphQLString },
+        parameters: { type: leagueGameLogParameters },
+        resultSets: {type: new GraphQLList(leagueGameLogResultSet)}
+    })
+}
 
 // const Rankings = new GraphQLObjectType({
 //     name: 'Rankings',
@@ -499,12 +527,16 @@ const RootQuery = new GraphQLObjectType({
             resolve: () => nba.stats.boxScore({ GameID: GameID }).then((data) => data['resultSets'])
         },
         scoreboard: {
-            type: new GraphQLList(Scoreboard),
+            type: Scoreboard,
             resolve: () => nba.stats.scoreboard({ gameDate: currentDate }).then((data) => data)
         },
         leagueLead: {
             type: leagueLeaders,
             resolve: () => nba.stats.leagueLeaders().then((data) => data)
+        },
+        leagueGameLog: {
+            type: new GraphQLObjectType(LeagueGameLog),
+            resolve: () => nba.stats.leagueGameLog({ PlayerOrTeam: "P" }).then(data => data)
         }
         // rankings: {
         //     type: new GraphQLList(Rankings),
