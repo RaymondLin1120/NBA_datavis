@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 // import OptionsDropdown from './OptionsDropdown'
 
-export default function Chart ({ children, config, resize }) {
-
-    const { height, width } =  { ...config }
+export default function Chart ({ children, config, style }) {
 
     const [optionsVisible, setOptionsVisible] = useState(false)
 
@@ -23,10 +21,8 @@ export default function Chart ({ children, config, resize }) {
     // }
 
     return (
-        <section className="chart" style={{ height, width }}>
-            <section className="chart-header-container">
-                <span>{ config.title }</span>
-                <span className="options-container">
+        <section className="chart">
+            <span className="options-container">
                     {/* <OptionsDropdown
                         options={ options }
                         visible={ optionsVisible }
@@ -37,9 +33,8 @@ export default function Chart ({ children, config, resize }) {
                             onClick={ () => setOptionsVisible(!optionsVisible) }
                         />
                     </OptionsDropdown> */}
-                </span>
-            </section>
-            { children }
+            </span>
+        { children }
         </section>
     )
 }

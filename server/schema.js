@@ -11,11 +11,31 @@ const {
 
 const nba = require('nba');
 
-// Test Data
-const curry = nba.findPlayer('Stephen Curry');
+const curry = nba.findPlayer('James Harden');
 const TeamID = nba.teamIdFromName("HOU");
 const GameID = "0021401082";
 
+const PlayerInfo =  new GraphQLObjectType({
+    name: 'playerInfo',
+    fields: () => ({
+        personId: { type: GraphQLInt },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+        displayFirstLast: { type: GraphQLString },
+        displayLastCommaFirst: { type: GraphQLString },
+        height: { type: GraphQLString },
+        weight: { type: GraphQLString },
+        seasonExp: { type: GraphQLInt },
+        jersey: { type: GraphQLString },
+        position: { type: GraphQLString },
+        rosterstatus: { type: GraphQLString },
+        teamId: { type: GraphQLInt },
+        teamName: { type: GraphQLString },
+        teamAbbreviation: { type: GraphQLString },
+        teamCode: { type: GraphQLString },
+        teamCity: { type: GraphQLString },
+    })
+})
 const HistoricStats= new GraphQLObjectType({
     name:'historicStats',
     fields: () => ({
@@ -27,12 +47,12 @@ const HistoricStats= new GraphQLObjectType({
         playerAge: { type: GraphQLInt },
         gp: { type: GraphQLInt },
         fgm: { type: GraphQLFloat },
-        fga: { type: GraphQLInt },
-        fGPct: { type: GraphQLFloat },
+        fga: { type: GraphQLFloat },
+        fgPct: { type: GraphQLFloat },
         fG3A: { type: GraphQLFloat },
-        pg3Pct: { type: GraphQLFloat },
+        fg3Pct: { type: GraphQLFloat },
         fG3M: { type: GraphQLFloat },
-        ftPct3M: { type: GraphQLFloat },
+        ftPct: { type: GraphQLFloat },
         fta: { type: GraphQLFloat },
         ftm: { type: GraphQLFloat },
         pts: { type: GraphQLFloat },
@@ -359,6 +379,10 @@ const leagueLeaders = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: () => ({
+        playerInfo: {
+            type: new GraphQLList(PlayerInfo),
+            resolve: () => nba.stats.playerInfo({ PlayerID: curry.playerId }).then((data) => data['commonPlayerInfo'])
+        },
         historicStats: {
             type: new GraphQLList(HistoricStats),
             resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data['seasonTotalsRegularSeason'])
@@ -401,10 +425,9 @@ const RootQuery = new GraphQLObjectType({
         // }
     })
 })
-//nba.stats.leagueLeaders().then((data) => console.log(data));
-//nba.stats.playerProfile({ PlayerID: curry.playerId}).then((data) => console.log(data)).catch(err => console.log(err));
-nba.stats.leagueLeaders().then(data => console.log(data)).catch(err => console.log(err));
 
+//nba.stats.leagueLeaders().then((data) => console.log(data));
+nba.stats.playerInfo({ PlayerID: curry.playerId }).then((data) => console.log(data))
 module.exports = new GraphQLSchema({
     query: RootQuery
 })
