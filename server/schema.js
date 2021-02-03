@@ -356,12 +356,12 @@ const lineScore = new GraphQLObjectType({
         ptsOt9:{ type: GraphQLInt },
         ptsOt10:{ type: GraphQLInt },
         pts:{ type: GraphQLInt },
-        fgPct:{ type: GraphQLInt },
-        ftPct:{ type: GraphQLInt },
-        fg3Pct:{ type: GraphQLInt },
-        ast:{ type: GraphQLInt },
-        reb:{ type: GraphQLInt },
-        tov:{ type: GraphQLInt }
+        fgPct:{ type: GraphQLFloat },
+        ftPct:{ type: GraphQLFloat },
+        fg3Pct:{ type: GraphQLFloat },
+        ast:{ type: GraphQLFloat },
+        reb:{ type: GraphQLFloat },
+        tov:{ type: GraphQLFloat }
     })
 })
 
