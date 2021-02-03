@@ -1,3 +1,4 @@
+const { query } = require('express');
 const {
     GraphQLObjectType, 
     GraphQLFloat,
@@ -489,7 +490,7 @@ const LeagueGameLog = {
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
-    fields: (playerName) => ({
+    fields: () => ({
         playerInfo: {
             type: new GraphQLList(PlayerInfo),
             resolve: () => nba.stats.playerInfo({ PlayerID: curry.playerId }).then((data) => data['commonPlayerInfo'])
@@ -536,18 +537,23 @@ const RootQuery = new GraphQLObjectType({
         },
         leagueGameLog: {
             type: new GraphQLObjectType(LeagueGameLog),
-            playerName: "Bradley",
-            resolve: (playerName) => (
+            args: {
+                playerName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
                 nba.stats.leagueGameLog({ PlayerOrTeam: "P" })
                 .then((data)=> {
                     // sort return data to return top 5 players
+                    console.log(args.playeName);
                     let sortedRecentGames = [];
                     let playerData = data.resultSets[0].rowSet; // playerdata is the array of array of player data
                     playerData.sort((a, b) => {
                         return parseInt(b[6]) - parseInt(a[6]); // index 6 is the gameid, sorts from greatest to smallest gameid
                     });
                     playerData.forEach((player) => {
-                        if (player[2] === playerName) { // index 2 is player name
+                        if (player[2] === args.playerName) { // index 2 is player name
                             sortedRecentGames.push(player);
                         }
                     }); 
@@ -562,25 +568,7 @@ const RootQuery = new GraphQLObjectType({
         // }
     })
 })
-function temp(playerName) {
-    nba.stats.leagueGameLog({PlayerOrTeam:"P"})
-    .then((data)=> {
-        // sort return data to return top 5 players
-        let sortedRecentGames = [];
-        let playerData = data.resultSets[0].rowSet; // playerdata is the array of array of player data
-        playerData.sort((a, b) => {
-            return parseInt(b[6]) - parseInt(a[6]); // index 6 is the gameid, sorts from greatest to smallest gameid
-        });
-        playerData.forEach((player) => {
-            if (player[2] === playerName) { // index 2 is player name
-                sortedRecentGames.push(player);
-            }
-        });
-        data.resultSets[0].rowSet = sortedRecentGames;
-        console.log(data.resultSets[0].rowSet);
-    })
-}
-//temp('Bradley Beal');
+
 //nba.stats.teamPlayerDashboard({ TeamID: TeamID, SeasonType: "Regular Season"}).then((data) => console.log(data));
 //nba.stats.leagueGameLog({PlayerOrTeam:"P"}).then((data)=> console.log(data))
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
