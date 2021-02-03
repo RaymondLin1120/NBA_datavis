@@ -546,7 +546,6 @@ const RootQuery = new GraphQLObjectType({
                 nba.stats.leagueGameLog({ PlayerOrTeam: "P" })
                 .then((data)=> {
                     // sort return data to return top 5 players
-                    console.log(args.playeName);
                     let sortedRecentGames = [];
                     let playerData = data.resultSets[0].rowSet; // playerdata is the array of array of player data
                     playerData.sort((a, b) => {
