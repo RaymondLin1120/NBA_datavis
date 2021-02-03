@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../../Components/Graphing/RadarStats'
-import { isNullableType } from 'graphql';
 
 const Player_Query = gql`
     query PlayerQuery {
@@ -32,15 +31,81 @@ const Player_Query = gql`
             teamName
             teamCity
         }
+        currentStats {
+            playerId
+            playerName
+            teamId
+            teamAbbreviation
+            age
+            gp
+            w
+            l
+            wPct
+            min
+            fgm
+            fga
+            fgPct
+            fG3M
+            fG3A
+            fg3Pct
+            ftm
+            fta
+            ftPct
+            oreb
+            dreb
+            reb
+            ast
+            tov
+            stl
+            blk
+            blka
+            pf
+            pfd
+            pts
+            plusMinus
+            nbaFantasyPts
+            dD2
+            tD3
+            gpRank
+            wRank
+            lRank
+            wPctRank
+            minRank
+            fgmRank
+            fgaRank
+            fgPctRank
+            fg3mRank
+            fg3aRank
+            fg3PctRank
+            ftmRank
+            ftaRank
+            ftPctRank
+            orebRank
+            drebRank
+            rebRank
+            astRank
+            tovRank
+            stlRank
+            blkRank
+            blkaRank
+            pfRank
+            pfdRank
+            ptsRank
+            plusMinusRank
+            nbaFantasyPtsRank
+            dd2Rank
+            td3Rank
+          }
     }
 `
 function Player() {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
+    const [playerData, setPlayerData] = useState([])
+    const [updated, setUpdated] = useState(false)
     const { loading, error, data } = useQuery(Player_Query);
     
     var temp_arr = []
-    
     useEffect(() => {
         if (!loading) {
             temp_arr = data['historicStats'].filter((item) =>
@@ -49,12 +114,13 @@ function Player() {
             )
             setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
             setPlayerInfo(data['playerInfo'])
+            setPlayerData(data['currentStats'])
+            setUpdated(true);
         }
-    }, [data]);
+    }, [data, updated]);
+    
     if (loading) return 'Loading...';
-
     if (error) return `Error! ${error.message}`;
-
     // const LoadData = () => {
     //     const { loading, error, data } = useQuery(Player_Query);
     //     if (!loading) {
@@ -126,7 +192,7 @@ function Player() {
     //     })
     // ))
 
-    // console.log(temp_arr)
+    console.log(playerInfo)
 
     return (
         <div className="playerDashboard">

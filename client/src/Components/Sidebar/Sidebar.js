@@ -1,34 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BiBasketball } from 'react-icons/bi';
-import { MdPeople, MdCompareArrows, MdSearch} from 'react-icons/md';
+import { MdPeople, MdCompareArrows, MdSearch, MdAssignmentInd, MdAssessment, MdDashboard} from 'react-icons/md';
 import { VscGraph } from 'react-icons/vsc';
 import { ImEyedropper } from 'react-icons/im';
 import { IconContext } from 'react-icons/lib';
+import { FaNewspaper } from 'react-icons/fa';
 
 const navIcons = [
     {
         title: 'Home',
         name: 'Home',
-        icon: <BiBasketball />,
+        icon: <MdDashboard />,
         path: '/Home'
     },
     {
-        title: 'Search',
-        name: 'Categories',
-        icon: <MdSearch />,
-        path: '/Categories'
+        title: 'Game-Scores',
+        name: 'Game Scores',
+        icon: <MdAssessment className = "nav-Icons"/>,
+        path: '/Games'
+    },
+    {
+        title: 'Player-News',
+        name: 'Player News',
+        icon: <FaNewspaper/>,
+        path: '/player-news'
     },
     {
         title: 'Player',
         name: 'Player Stats',
-        icon:<VscGraph className = "nav-Icons"/>,
+        icon:<MdAssignmentInd className = "nav-Icons"/>,
         path: '/Player'
     },
     {
         title: 'Player-Comparison',
         name: 'Compare',
-        icon: <MdCompareArrows className = "nav-Icons"/>,
+        icon: <MdPeople className = "nav-Icons"/>,
         path: '/Player-Comparison'
     },
     {
@@ -36,6 +43,12 @@ const navIcons = [
         name: 'Team Comparison',
         icon: <MdPeople />,
         path: '/Team-Comparison'
+    },
+    {
+        title: 'Search',
+        name: 'Search',
+        icon: <MdSearch />,
+        path: '/Search'
     }
 ]
 
