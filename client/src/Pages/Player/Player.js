@@ -5,7 +5,7 @@ import RadarStats from '../../Components/Graphing/RadarStats'
 import SearchBar from '../../Components/SearchBar/SearchBar'
 
 const Player_Query = gql`
-    query PlayerQuery ($playerName: String!) {
+    query PlayerQuery ($playerName: String = "Bradley Beal") {
         historicStats (playerName: $playerName) {
             playerId
             seasonId
@@ -123,13 +123,15 @@ function Player() {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
-    const [currentPlayer, setCurrentPlayer] = useState("Bradley Beal")
+    const [currentPlayer, setCurrentPlayer] = useState()
+
     const { loading, error, data } = useQuery(Player_Query, {
         variables: {playerName: currentPlayer}
     });
     const [dataLoaded, setDataLoaded] = useState(false);
     
     var temp_arr = []
+
     useEffect(() => {
         if (!loading) {
             temp_arr = data['historicStats'].filter((item) =>
@@ -142,24 +144,22 @@ function Player() {
             console.log(temp_arr)
             setDataLoaded(true);
         }
-    }, [data, currentPlayer]);
+    }, [data]);
     
     if (loading) return 'Loading...';
-    if (error) return `Error! ${error.message}`;
-
-    console.log(playerInfo)
 
     return (
         <div className = "playerPageContainer">
-            {dataLoaded && 
+            <SearchBar setCurrentPlayer = {setCurrentPlayer}/>
+            {(dataLoaded && !error)  && 
                 <>
-                <SearchBar/>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
                     <RadarStats config = {seasonStats} style = {{height:'350px', width:'1050px'}}/> 
-                    { !dataLoaded && <div>Loading</div> }
                 </div>
-                </>}
+            </>}
+            { error && <div> {error.message} </div>}
+            { !dataLoaded  && <div>Loading</div> }
          </div>
     )
 }

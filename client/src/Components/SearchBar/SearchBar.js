@@ -1,12 +1,27 @@
 import React from 'react'
+import { IconContext } from 'react-icons/lib';
 import { MdSearch } from 'react-icons/md';
 
-function SearchBar() {
+function SearchBar(props) {
     return (
         <div className = "toolbarContainer">
             <form className = "searchBar">
-                <input className = "inputBox" type="text" placeholder="Type something to search ..." autocomplete="off"></input>
-                <MdSearch className = "searchButton"/>
+                <div className = "inputBox">
+                    <input className = "textBox" 
+                        type="text" 
+                        placeholder="Search player..."
+                        autoComplete="off"
+                        onChange = {(e) => {
+                        }}
+                        onKeyDown = {(e) => {
+                            if (e.key === 'Enter') {
+                                props.setCurrentPlayer(e.target.value)
+                            }}}>
+                    </input>
+                    <IconContext.Provider value = {{ size: '25px'}}>
+                        <MdSearch onClick = {(e) => props.setCurrentPlayer(document.getElementsByClassName("textBox").value)}/>
+                    </IconContext.Provider>
+                </div>
             </form>
         </div>
     )

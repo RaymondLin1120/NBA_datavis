@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BiBasketball } from 'react-icons/bi';
 import { MdPeople, MdCompareArrows, MdSearch, MdAssignmentInd, MdAssessment, MdDashboard} from 'react-icons/md';
 import { VscGraph } from 'react-icons/vsc';
+import { AiFillFire } from 'react-icons/ai';
 import { ImEyedropper } from 'react-icons/im';
 import { IconContext } from 'react-icons/lib';
 import { FaNewspaper } from 'react-icons/fa';
@@ -19,6 +20,12 @@ const navIcons = [
         name: 'Game Scores',
         icon: <MdAssessment className = "nav-Icons"/>,
         path: '/Games'
+    },
+    {
+        title: 'Hot-Picks/DFS plays',
+        name: 'Hot Picks/DFS plays',
+        icon: <AiFillFire/>,
+        path: '/Fire'
     },
     {
         title: 'Player-News',
