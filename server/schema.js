@@ -611,49 +611,31 @@ const RootQuery = new GraphQLObjectType({
 
 
 //Function for creating top 30, top 60, top 100
-const topCatStats = [
-    {
-        fgPct:{subject:"Field-Goal-%"},
-        //pg3Pct:{subject:"3s-%"},
-        ftPct:{subject:"Free-Throw-%"},
-        fG3M:{subject:"3s-%"},
-        pts:{subject:"Points"},
-        min:{subject:"Minutes"},
-        reb:{subject:"Rebounds"},
-        ast:{subject:"Assists"},
-        stl:{subject:"Steals"},
-        blk:{subject:"Blocks"},
-        tov:{subject:"Turnovers"}
-    }   
-]
-//let statCats = ["PTS", "REB", "AST", "STL", "BLK", "TOV"];
-let statCats =['PTS']
+var topCatStats = {}
+// let statCats = ["PTS", "REB", "AST", "STL", "BLK", "TOV"];
+let statCats = ["PTS", "REB"];
 let iterations = [30, 70, 120, 180];
 console.log(iterations[0])
 let k = 0
-// function calcTopStats(statCats, iterations) {}
-statCats.forEach((cat) => (
+
+function calcTopStats(cat, iterations) {
     nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:cat}).then((data)=> {
+        let sum = 0
+        console.log(data)
         let playerData = data['resultSet']['rowSet']
-        let sum = 0;
         for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
-            console.log(playerData[i][22])
             sum = sum + playerData[i][22]
             if (iterations[k] === (i + 1)) {
-                topCatStats['top' + iterations[k].toString()] = sum/iterations[k]
-                console.log(sum/iterations[k])
+                topCatStats['top' + iterations[k].toString()] = { ...topCatStats['top' + iterations[k].toString()], [cat]: sum/iterations[k] };
+                //topCatStats['top' + iterations[k].toString()][cat.toLowerCase()] = sum/iterations[k]
                 k++;
             }
         }
         console.log(topCatStats)
-        //console.log(topCatStats['top30'].pts)
-        //console.log(sum)
-        // playerData.map((item) => {
-        //     console.log(item[22])
-        // })
-    }))
-)
-
+    })
+}
+statCats.forEach((cat) => (calcTopStats(cat, iterations)))
+//console.log(nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:"REB"}))
 module.exports = new GraphQLSchema({
     query: RootQuery
 })

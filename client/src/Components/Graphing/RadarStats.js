@@ -3,7 +3,7 @@ import React from 'react'
 import Chart from './Chart'
 import EChart from './EChart.js'
 
-function RadarStats({ config, resize , style}) {
+function RadarStats({ config, resize , style, size}) {
     let option = {
       title: {
           text: 'Averages',
@@ -20,6 +20,7 @@ function RadarStats({ config, resize , style}) {
             saveAsImage: {}
         }
       },
+      responsive:true,
       legend: {
           data: config['seasonId']
       },
@@ -34,6 +35,7 @@ function RadarStats({ config, resize , style}) {
               }
           },
           shape: 'circle',
+          radius: size,
           center: ['25%', '50%'],
           indicator: [
               { name: 'Points', max: 40},
@@ -53,6 +55,7 @@ function RadarStats({ config, resize , style}) {
             }
         },
         shape: 'circle',
+        radius:size,
         center: ['75%', '50%'],
         indicator: [
             { name: 'Field Goal %', max: 1},

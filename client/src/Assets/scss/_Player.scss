@@ -18,12 +18,13 @@
     display:flex;
     height: fit-content;
     padding:10px;
-
+    background-color:#f7f7f7;
+    border-radius: 10px;
     > div {
         padding: 10px;
     }
     .playerInfo {
-        width: 200px;
+        width: 300px;
     }
     p {
         text-align:left;

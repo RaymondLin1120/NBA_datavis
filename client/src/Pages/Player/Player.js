@@ -146,6 +146,7 @@ function Player() {
         }
     }, [data]);
     
+    console.log(seasonStats)
     if (loading) return 'Loading...';
 
     return (
@@ -155,7 +156,7 @@ function Player() {
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
-                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'1050px'}}/> 
+                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/> 
                 </div>
             </>}
             { error && <div> {error.message} </div>}
