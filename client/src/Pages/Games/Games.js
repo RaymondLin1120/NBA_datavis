@@ -49,7 +49,7 @@ const Game_Query = gql`
 function Games() {
     const [gameHeader, setGameHeader] = useState([]);
     const [lineScore, setLineScore] = useState([]);
-
+    const [dataLoaded, setDataLoaded] = useState(false)
     const { loading, error, data } = useQuery(Game_Query);
     
     var temp_arr = []
@@ -57,17 +57,29 @@ function Games() {
         if (!loading) {
             setGameHeader(data['scoreboard']['gameHeader'])
             setLineScore(data['scoreboard']['lineScore'])
+            setDataLoaded(true)
         }
     }, [data]);
-    console.log(gameHeader)
-
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
 
+    console.log(lineScore)
     return (
-        <div className = "gameDashboard">
-            <h1 className = "Date"> Today's Games </h1>
-        </div>
+        <section className = "gameDashboard">
+            { !dataLoaded && <div>Loading</div> }
+            {dataLoaded &&
+                <>
+                <h1 className = "Date"> Today's Games </h1>
+                <div className = "gameContainer">
+                    <img src = {require("../../Assets/Images/avatar.png")} style = {{height: '100px', width: '100px'}}></img>
+                    <img src = {require("../../Assets/Images/avatar.png")} style = {{height: '100px', width: '100px'}}></img>
+                    <p> {gameHeader[0]['homeTeamId']} </p>
+                    <p> {gameHeader[0]['visitorTeamId']} </p>
+                    <p> {gameHeader[0]['livePeriodTimeBcast']} </p>
+                </div>
+                </>
+            }  
+        </section>
     )
 }
 

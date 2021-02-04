@@ -12,8 +12,9 @@ const {
 
 const nba = require('nba');
 
+const playerName = "";
 const curry = nba.findPlayer('James Harden');
-const TeamID = nba.teamIdFromName("HOU");
+const TeamID = nba.teamIdFromName("Hou");
 const GameID = "0021401082";
 
 var d = new Date();
@@ -493,11 +494,25 @@ const RootQuery = new GraphQLObjectType({
     fields: () => ({
         playerInfo: {
             type: new GraphQLList(PlayerInfo),
-            resolve: () => nba.stats.playerInfo({ PlayerID: curry.playerId }).then((data) => data['commonPlayerInfo'])
+            args: {
+                playerName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
+                nba.stats.playerInfo({ PlayerID:  nba.findPlayer(args.playerName).playerId }).then((data) => data['commonPlayerInfo'])
+            )
         },
         historicStats: {
             type: new GraphQLList(HistoricStats),
-            resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data['seasonTotalsRegularSeason'])
+            args: {
+                playerName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
+                nba.stats.playerProfile({ PlayerID:  nba.findPlayer(args.playerName).playerId }).then((data) => data['seasonTotalsRegularSeason'])
+            )
         },
         currentStats: {
             type: new GraphQLList(CurrentStats),
@@ -505,7 +520,14 @@ const RootQuery = new GraphQLObjectType({
         },
         shots: {
             type: new GraphQLList(Shots),
-            resolve: () => nba.stats.shots({ PlayerID: curry.playerId }).then((data) => data['shot_Chart_Detail'])
+            args: {
+                playerName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
+                nba.stats.shots({ PlayerID:  nba.findPlayer(args.playerName).playerId }).then((data) => data['shot_Chart_Detail'])
+            )
         },
         shotFreq: {
             type: new GraphQLList(ShotFreq),
@@ -513,11 +535,25 @@ const RootQuery = new GraphQLObjectType({
         },
         teamRoster: {
             type: new GraphQLList(TeamRoster),
-            resolve: () => nba.stats.commonTeamRoster({TeamID: TeamID}).then((data) => data['commonTeamRoster'])
+            args: {
+                teamName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
+                nba.stats.commonTeamRoster({TeamID: nba.teamIdFromName(args.teamName)}).then((data) => data['commonTeamRoster'])
+            )
         },
         teamShooting: {
             type: new GraphQLList(TeamShooting),
-            resolve: () => nba.stats.teamShooting({TeamID: TeamID}).then((data) => data['leagueDashPTShots'])
+            args: {
+                teamName: {
+                    type: GraphQLString
+                }
+            },
+            resolve: (root, args) => (
+                nba.stats.teamShooting({TeamID: nba.teamIdFromName(args.teamName)}).then((data) => data['leagueDashPTShots'])
+            )
         },
         teamStats: {
             type: new GraphQLList(TeamStats),
@@ -551,11 +587,10 @@ const RootQuery = new GraphQLObjectType({
                     playerData.sort((a, b) => {
                         return parseInt(b[6]) - parseInt(a[6]); // index 6 is the gameid, sorts from greatest to smallest gameid
                     });
-                    playerData.forEach((player) => {
-                        if (player[2] === args.playerName) { // index 2 is player name
-                            sortedRecentGames.push(player);
-                        }
-                    }); 
+
+                    sortedRecentGames = playerData.filter((item) => (
+                        item[2] === args.playerName
+                    ))
                     data.resultSets[0].rowSet = sortedRecentGames;
                     return data;
                 })
@@ -571,6 +606,7 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.teamPlayerDashboard({ TeamID: TeamID, SeasonType: "Regular Season"}).then((data) => console.log(data));
 //nba.stats.leagueGameLog({PlayerOrTeam:"P"}).then((data)=> console.log(data))
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
+console.log(nba.teams)
 module.exports = new GraphQLSchema({
     query: RootQuery
 })
