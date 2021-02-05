@@ -3,6 +3,8 @@ import PlayerProfile from './PlayerProfile';
 import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../../Components/Graphing/RadarStats'
 import SearchBar from '../../Components/SearchBar/SearchBar'
+import Boxscores from '../../Components/Graphing/Boxscores'
+import { MdBlock } from 'react-icons/md';
 
 const Player_Query = gql`
     query PlayerQuery ($playerName: String = "Bradley Beal") {
@@ -131,7 +133,7 @@ function Player() {
     const [dataLoaded, setDataLoaded] = useState(false);
     
     var temp_arr = []
-
+    var temp_arr1 = []
     useEffect(() => {
         if (!loading) {
             temp_arr = data['historicStats'].filter((item) =>
@@ -140,14 +142,35 @@ function Player() {
             )
             setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
             setPlayerInfo(data['playerInfo'])
-            setPlayerGames(data['leagueGameLog'])
-            console.log(temp_arr)
+            //setPlayerGames(data['leagueGameLog']['resultSets'])
+            data['leagueGameLog']['resultSets'][0]['rowSet'].map((item) => (
+                temp_arr1.push({
+                    gameID:item[6],
+                    date: item[7],
+                    matchup: item[8],
+                    wl:item[9],
+                    fgPct:item[13],
+                    fg3Pct:item[16],
+                    ftPct:item[19],
+                    min:item[10],
+                    reb:item[22],
+                    ast:item[23],
+                    blk:item[25],
+                    stl:item[24],
+                    tov:item[26],
+                    pf:item[27],
+                    pts:item[28]
+                })
+            ))
+            setPlayerGames(temp_arr1)
             setDataLoaded(true);
         }
     }, [data]);
-    
-    console.log(seasonStats)
     if (loading) return 'Loading...';
+
+    if (dataLoaded) {
+        console.log(playerGames)
+    }
 
     return (
         <div className = "playerPageContainer">
@@ -156,7 +179,8 @@ function Player() {
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
-                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/> 
+                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/>
+                    <Boxscores data = {playerGames} />
                 </div>
             </>}
             { error && <div> {error.message} </div>}
