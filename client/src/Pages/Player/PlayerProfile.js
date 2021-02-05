@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function PlayerProfile(props) {
+    useEffect(() => {
+        console.log(props.playerInfo)
+    }, [])
     return (
         <section className="playerInfo-container">
         <div className="player-headshot">
-            <img src = {require("../../Assets/Images/avatar.png")}></img>
+            <img src = {`https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${props.playerInfo[0].personId}.png`}></img>
             <p> {props.playerInfo.displayFirstLast}</p>
         </div>
        

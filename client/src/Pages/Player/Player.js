@@ -123,7 +123,7 @@ function Player() {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
-    const [currentPlayer, setCurrentPlayer] = useState()
+    const [currentPlayer, setCurrentPlayer] = useState();
 
     const { loading, error, data } = useQuery(Player_Query, {
         variables: {playerName: currentPlayer}
@@ -141,7 +141,7 @@ function Player() {
             setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
             setPlayerInfo(data['playerInfo'])
             setPlayerGames(data['leagueGameLog'])
-            console.log(temp_arr)
+            console.log(playerInfo);
             setDataLoaded(true);
         }
     }, [data]);
