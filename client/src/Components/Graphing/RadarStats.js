@@ -9,11 +9,7 @@ function RadarStats({ config, resize , style, size}) {
           text: 'Averages',
       },
       //backgroundColor: '#161627',
-      tooltip: {
-        //   axisPointer : {
-        //       type:'cross'
-        //   }
-      },
+      tooltip: {},
       toolbox: {
         show: true,
         feature: {
@@ -67,7 +63,6 @@ function RadarStats({ config, resize , style, size}) {
         ]
       }],
       series: [{
-        //axisName: 'James Harden Average',
         type: 'radar',
         //areaStyle: {normal: {}},
         data: 
@@ -77,7 +72,6 @@ function RadarStats({ config, resize , style, size}) {
             }))
       },
       {
-        //axisName: 'James Harden Average',
         type: 'radar',
         radarIndex: 1,
         //areaStyle: {normal: {}},
@@ -91,7 +85,7 @@ function RadarStats({ config, resize , style, size}) {
 
   return (
         <Chart config={config}>
-            <EChart option={ option } resize={resize} style={ style }/>
+            <EChart option={ option } resize={ resize } style={ style }/>
         </Chart>
     )
 }

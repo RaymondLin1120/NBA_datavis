@@ -3,7 +3,8 @@ import PlayerProfile from './PlayerProfile';
 import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../../Components/Graphing/RadarStats'
 import SearchBar from '../../Components/SearchBar/SearchBar'
-import { useHistory, useParams } from 'react-router-dom';
+import Boxscores from '../../Components/Graphing/Boxscores'
+import { MdBlock } from 'react-icons/md';
 
 const Player_Query = gql`
 query PlayerQuery ($playerName: String = "Bradley Beal") {
@@ -136,7 +137,7 @@ function Player(props) {
     const [dataLoaded, setDataLoaded] = useState(false);
     
     var temp_arr = []
-
+    var temp_arr1 = []
     useEffect(() => {
         if (!loading) {
             temp_arr = data['historicStats'].filter((item) =>
@@ -145,16 +146,35 @@ function Player(props) {
             )
             setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
             setPlayerInfo(data['playerInfo'])
-            setPlayerGames(data['leagueGameLog'])
-
-            console.log(props.query);
-            //history.push(`/Player?${currentPlayer}`)
+            //setPlayerGames(data['leagueGameLog']['resultSets'])
+            data['leagueGameLog']['resultSets'][0]['rowSet'].map((item) => (
+                temp_arr1.push({
+                    gameID:item[6],
+                    date: item[7],
+                    matchup: item[8],
+                    wl:item[9],
+                    fgPct:parseFloat(item[13]*100).toFixed(1)+"%",
+                    fg3Pct:parseFloat(item[16]*100).toFixed(1)+"%",
+                    ftPct:parseFloat(item[19]*100).toFixed(1)+"%",
+                    min:item[10],
+                    reb:item[22],
+                    ast:item[23],
+                    blk:item[25],
+                    stl:item[24],
+                    tov:item[26],
+                    pf:item[27],
+                    pts:item[28]
+                })
+            ))
+            setPlayerGames(temp_arr1)
             setDataLoaded(true);
         }
     }, [data]);
-    
-
     if (loading) return 'Loading...';
+
+    if (dataLoaded) {
+        console.log(playerGames)
+    }
 
     return (
         <div className = "playerPageContainer">
@@ -164,7 +184,8 @@ function Player(props) {
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
-                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/> 
+                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/>
+                    <Boxscores data = {playerGames} />
                 </div>
             </>}
             { error && <div> {error.message} </div>}

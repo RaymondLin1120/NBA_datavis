@@ -20,6 +20,65 @@ const GameID = "0021401082";
 var d = new Date();
 var currentDate = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
 
+var topCatStats = {}
+let statCats = [
+    {
+        cat:"PTS",
+        index: 22
+    },
+    {
+        cat:"REB",
+        index: 17
+    },
+    {
+        cat:"AST",
+        index: 18
+    }, 
+    {
+        cat:"STL",
+        index: 19
+    },
+    {
+        cat:"BLK",
+        index: 20
+    },
+    {
+        cat: "TOV",
+        index: 21
+    },
+];
+
+let iterations = [30, 70, 120, 180];
+let k = 0
+
+async function calcTopStats(cat, iterations, topCatStats, k) {
+    nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:cat.cat})
+    .then((data)=> {
+        let sum = 0
+        let tempObj = topCatStats;
+        //console.log(data)
+        let playerData = data['resultSet']['rowSet']
+        for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
+            sum =  sum + playerData[i][cat.index]
+            if (iterations[k] === (i + 1)) {
+                tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: (sum/iterations[k]).toFixed(2) };
+                k++;
+            }
+        }
+        console.log(tempObj)
+        return tempObj;
+    })
+}
+
+async function tempFunction(obj) {
+    for (let i = 0; i < statCats.length; ++i) {
+        obj = await calcTopStats(statCats[i], iterations, topCatStats, k);
+    }
+    return obj
+}
+let obj = {};
+tempFunction(obj);
+
 const PlayerInfo =  new GraphQLObjectType({
     name: 'playerInfo',
     fields: () => ({
@@ -459,6 +518,27 @@ const LeagueGameLog = {
     })
 }
 
+const playerStats = new GraphQLObjectType({
+    name: "playerStats",
+    fields: () => ({
+        pts: { type: GraphQLFloat},
+        reb: { type: GraphQLFloat},
+        ast: { type: GraphQLFloat},
+        stl: { type: GraphQLFloat},
+        blk: { type: GraphQLFloat},
+        To: { type: GraphQLFloat}
+    })
+})
+const TopStats = new GraphQLObjectType({
+    name: "topStats",
+    fields: () => ({
+        top30: { type: new GraphQLList(playerStats)},
+        top70: { type: new GraphQLList(playerStats)},
+        top120: { type: new GraphQLList(playerStats)},
+        top180: { type: new GraphQLList(playerStats)}
+    })
+})
+
 // const Rankings = new GraphQLObjectType({
 //     name: 'Rankings',
 //     fields: () => ({
@@ -595,7 +675,11 @@ const RootQuery = new GraphQLObjectType({
                     return data;
                 })
             )
-        }
+        },
+        // topStats: {
+        //     type: new GraphQLObjectType(TopStats),
+        //     resolve: () => obj
+        // }
         // rankings: {
         //     type: new GraphQLList(Rankings),
         //     resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data["seasonRankingsRegulatSeason"])
@@ -608,73 +692,14 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:"REB"}).then((data)=> console.log(data))
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
 
-function myFunction(cat) {
-    return new Promise((resolve, reject) => {
-        let topCategoryStats = {};
-        let categories = ["PTS", "REB"];
-        let iterations = [30, 70, 120, 180];
-        let counter = 0;
-
-        for (let i = 0; i < categories.length; ++i) {
-            nba.stats.leagueLeaders({ PlayerOrTeam: "P", StatCategory: categories[i] })
-            .then((data) => {
-                let playerData = data["resultSet"]["rowSet"];
-                let sum = 0;
-
-                for (let k = 0; k < iterations[iterations.length - 1]; ++i) {
-                    sum += playerData[k][22];
-                    if (iterations[counter] === (k + 1)) {
-                        topCategoryStats["top" + iterations[counter].toString()] = { ...topCategoryStats["top" + iterations[counter].toString()], [categories[i]]: sum / iterations[counter] };
-                        counter++;
-                    }
-                }
-            })
-        }
-        console.log(topCategoryStats);
-        resolve(topCategoryStats);
-    })
-}
 
 //Function for creating top 30, top 60, top 100
-var topCatStats = {}
-// let statCats = ["PTS", "REB", "AST", "STL", "BLK", "TOV"];
-let statCats = ["PTS", "REB"];
-let iterations = [30, 70, 120, 180];
-//console.log(iterations[0])
-let k = 0
 
-async function calcTopStats(cat, iterations, topCatStats, k) {
-    nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:cat})
-    .then((data)=> {
-        let sum = 0
-        let tempObj = topCatStats;
-        //console.log(data)
-        let playerData = data['resultSet']['rowSet']
-        for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
-            sum =  sum + playerData[i][22]
-            if (iterations[k] === (i + 1)) {
-                tempObj['top' + iterations[k].toString()] = { [cat]: sum/iterations[k] };
-                //topCatStats['top' + iterations[k].toString()][cat.toLowerCase()] = sum/iterations[k]
-                k++;
-            }
-        }
-        console.log(tempObj)
-        return tempObj;
-    })
-}
 
-async function tempFunction(obj) {
-    console.log(obj)
-    for (let i = 0; i < statCats.length; ++i) {
-        obj = await calcTopStats(statCats[i], iterations, topCatStats, k);
-    }
-    //console.log(obj);
-}
-let obj = {};
-tempFunction(obj);
 //statCats.forEach((cat) => (calcTopStats(cat, iterations, topCatStats, k)))
 //calcTopStats(statCats[0], iterations, topCatStats).then((data) => console.log(data))
 //console.log(nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:"REB"}))
+// console.log(nba.teams)
 module.exports = new GraphQLSchema({
     query: RootQuery
 })

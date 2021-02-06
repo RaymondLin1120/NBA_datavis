@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-
+import nba from 'nba'
 export default function PlayerProfile(props) {
     useEffect(() => {
         console.log(props.playerInfo)
@@ -8,6 +8,8 @@ export default function PlayerProfile(props) {
         <section className="playerInfo-container">
         <div className="player-headshot">
             <img src = {`https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${props.playerInfo[0].personId}.png`}></img>
+            {/* <p> {props.playerInfo[0].personId} </p>
+            <p> {nba.teamIdFromName("Washington Wizards")} </p> */}
             <p> {props.playerInfo.displayFirstLast}</p>
         </div>
        
