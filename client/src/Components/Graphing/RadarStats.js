@@ -3,7 +3,7 @@ import React from 'react'
 import Chart from './Chart'
 import EChart from './EChart.js'
 
-function RadarStats({ config, resize , style, size}) {
+function RadarStats({ config, statData, resize , style, size}) {
     let option = {
       title: {
           text: 'Averages',

@@ -28,14 +28,14 @@ const Player_Query = gql`
             teamAbbreviation
         }
         playerInfo (playerName: $playerName) {
-            personId
+            playerId:personId
             displayFirstLast
             jersey
             position
             teamName
             teamCity
         }
-          topStats{
+        topStats{
             top30 {
                 seasonId
                 pts:PTS
@@ -143,13 +143,14 @@ function Player(props) {
                 })
             ))
             setPlayerGames(temp_arr1)
+            setTopStats(data.topStats)
             setDataLoaded(true);
         }
     }, [data]);
     if (loading) return 'Loading...';
 
     if (dataLoaded) {
-        console.log(seasonStats)
+        console.log(topStats)
     }
 
     return (
