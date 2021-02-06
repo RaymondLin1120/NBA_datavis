@@ -79,6 +79,9 @@ async function tempFunction() {
     //    obj = await calcTopStats(statCats[i], iterations, k)
        await calcTopStats(statCats[i], iterations, k)
     }
+    for (let j = 0; j < iterations.length; ++j) {
+        tempObj['top' + iterations[j].toString()].seasonId = 'top' + iterations[j].toString()
+    }
     //obj = tempObj
     return tempObj
 }
@@ -525,6 +528,7 @@ const LeagueGameLog = {
 const playerStats = new GraphQLObjectType({
     name: "playerStats",
     fields: () => ({
+        seasonId: { type: GraphQLString },
         PTS: { type: GraphQLFloat },
         REB: { type: GraphQLFloat },
         AST: { type: GraphQLFloat },

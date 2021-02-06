@@ -37,6 +37,7 @@ const Player_Query = gql`
         }
           topStats{
             top30 {
+                seasonId
                 pts:PTS
                 reb:REB
                 ast:AST
@@ -45,6 +46,7 @@ const Player_Query = gql`
                 tov:TOV
             }
             top70 {
+                seasonId
                 pts:PTS
                 reb:REB
                 ast:AST
@@ -53,6 +55,7 @@ const Player_Query = gql`
                 tov:TOV
             }
             top120 {
+                seasonId
                 pts:PTS
                 reb:REB
                 ast:AST
@@ -61,6 +64,7 @@ const Player_Query = gql`
                 tov:TOV
             }
             top180 {
+                seasonId
                 pts:PTS
                 reb:REB
                 ast:AST
@@ -97,7 +101,8 @@ function Player(props) {
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
-    const [currentPlayer, setCurrentPlayer] = useState(useParams());
+    const [topStats, setTopStats] =useState([])
+    const [currentPlayer, setCurrentPlayer] = useState(useParams())
 
     const history = useHistory();
 
