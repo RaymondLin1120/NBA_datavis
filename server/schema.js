@@ -7,7 +7,8 @@ const {
     GraphQLList,
     GraphQLSchema, 
     GraphQLScalarType,
-    GraphQLJSON
+    GraphQLJSON,
+    GraphQLBoolean
     } = require('graphql');
 
 const nba = require('nba');
@@ -51,33 +52,36 @@ let statCats = [
 let iterations = [30, 70, 120, 180];
 let k = 0
 
-async function calcTopStats(cat, iterations, topCatStats, k) {
-    nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:cat.cat})
+let tempObj = {}
+
+async function calcTopStats(cat, iterations, k) {
+    await nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:cat.cat})
     .then((data)=> {
         let sum = 0
-        let tempObj = topCatStats;
+        // let tempObj = topCatStats;
         //console.log(data)
         let playerData = data['resultSet']['rowSet']
         for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
             sum =  sum + playerData[i][cat.index]
             if (iterations[k] === (i + 1)) {
-                tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: (sum/iterations[k]).toFixed(2) };
+                tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: sum/iterations[k] };
+                //tempObj['top' + iterations[k].toString()] = { [cat.cat]: (sum/iterations[k]).toFixed(2) };
                 k++;
             }
         }
-        console.log(tempObj)
-        return tempObj;
+        return tempObj
     })
 }
 
-async function tempFunction(obj) {
+async function tempFunction() {
+    let obj = {}
     for (let i = 0; i < statCats.length; ++i) {
-        obj = await calcTopStats(statCats[i], iterations, topCatStats, k);
+    //    obj = await calcTopStats(statCats[i], iterations, k)
+       await calcTopStats(statCats[i], iterations, k)
     }
-    return obj
+    //obj = tempObj
+    return tempObj
 }
-let obj = {};
-tempFunction(obj);
 
 const PlayerInfo =  new GraphQLObjectType({
     name: 'playerInfo',
@@ -447,10 +451,10 @@ const confStandingsByDay = new GraphQLObjectType({
 const Scoreboard = new GraphQLObjectType({
     name:"scoreboard",
     fields: () => ({
-        gameHeader: { type: new GraphQLList(gameHeader)},
-        lineScore: { type: new GraphQLList(lineScore)},
-        eastConfStandingsByDay: { type: new GraphQLList(confStandingsByDay)},
-        westConfStandingsByDay: { type: new GraphQLList(confStandingsByDay)}
+        gameHeader: { type: new GraphQLList(gameHeader) },
+        lineScore: { type: new GraphQLList(lineScore) },
+        eastConfStandingsByDay: { type: new GraphQLList(confStandingsByDay) },
+        westConfStandingsByDay: { type: new GraphQLList(confStandingsByDay) }
     })
 })
 
@@ -514,30 +518,296 @@ const LeagueGameLog = {
     fields: () => ({
         resource: { type: GraphQLString },
         parameters: { type: leagueGameLogParameters },
-        resultSets: {type: new GraphQLList(leagueGameLogResultSet)}
+        resultSets: { type: new GraphQLList(leagueGameLogResultSet) }
     })
 }
 
 const playerStats = new GraphQLObjectType({
     name: "playerStats",
     fields: () => ({
-        pts: { type: GraphQLFloat},
-        reb: { type: GraphQLFloat},
-        ast: { type: GraphQLFloat},
-        stl: { type: GraphQLFloat},
-        blk: { type: GraphQLFloat},
-        To: { type: GraphQLFloat}
+        PTS: { type: GraphQLFloat },
+        REB: { type: GraphQLFloat },
+        AST: { type: GraphQLFloat },
+        STL: { type: GraphQLFloat },
+        BLK: { type: GraphQLFloat },
+        TOV: { type: GraphQLFloat }
     })
 })
 const TopStats = new GraphQLObjectType({
     name: "topStats",
     fields: () => ({
-        top30: { type: new GraphQLList(playerStats)},
-        top70: { type: new GraphQLList(playerStats)},
-        top120: { type: new GraphQLList(playerStats)},
-        top180: { type: new GraphQLList(playerStats)}
+         top30: { type: playerStats },
+         top70: { type: playerStats },
+         top120: { type: playerStats },
+         top180: { type: playerStats }
     })
 })
+
+const teamSitesOnly = new GraphQLObjectType({
+    name: "teamSiteInfo",
+    fields: () => ({
+        teamKey: { type:  GraphQLString },
+        teamName: { type:  GraphQLString },
+        teamCode: { type:  GraphQLString },
+        teamNickname: { type:  GraphQLString },
+        teamTricode: { type:  GraphQLString },
+        streakText: { type:  GraphQLString }
+    })
+})
+const Standings = new GraphQLObjectType({
+    name: "standings",
+    fields: () => ({
+        teamId: { type:  GraphQLString },
+        win: { type:  GraphQLString },
+        loss: { type:  GraphQLString },
+        winPct: { type:  GraphQLString },
+        winPctV2: { type:  GraphQLString },
+        lossPct: { type:  GraphQLString },
+        lossPctV2: { type:  GraphQLString },
+        gamesBehind: { type:  GraphQLString },
+        divGamesBehind: { type:  GraphQLString },
+        clinchedPlayoffsCode: { type:  GraphQLString },
+        clinchedPlayoffsCodeV2: { type:  GraphQLString },
+        confRank: { type:  GraphQLString },
+        confWin: { type:  GraphQLString },
+        confLoss: { type:  GraphQLString },
+        divWin: { type:  GraphQLString },
+        divLoss: { type:  GraphQLString },
+        homeWin: { type:  GraphQLString },
+        homeLoss: { type:  GraphQLString },
+        awayWin: { type:  GraphQLString },
+        awayLoss: { type:  GraphQLString },
+        lastTenWin: { type:  GraphQLString },
+        lastTenLoss: { type:  GraphQLString },
+        streak: { type:  GraphQLString },
+        divRank: { type:  GraphQLString },
+        isWinStreak: { type:  GraphQLBoolean },
+        teamSitesOnly: { type: teamSitesOnly}
+    })
+})
+
+const catchShoot = new GraphQLObjectType({
+    name: "catchShootStats",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        catchShootFgm: { type: GraphQLFloat },
+        catchShootFga: { type: GraphQLFloat },
+        catchShootFgPct: { type: GraphQLFloat },
+        catchShootPts: { type: GraphQLFloat },
+        catchShootFg3m: { type: GraphQLFloat },
+        catchShootFg3a: { type: GraphQLFloat },
+        catchShootFg3Pct: { type: GraphQLFloat },
+        catchShootEfgPct: { type: GraphQLFloat }
+    }),
+})
+
+const drives = new GraphQLObjectType({
+    name: "drives",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        drives: { type: GraphQLFloat },
+        driveFgm: { type: GraphQLFloat },
+        driveFga: { type: GraphQLFloat },
+        driveFgPct: { type: GraphQLFloat },
+        driveFtm: { type: GraphQLFloat },
+        driveFta: { type: GraphQLFloat },
+        driveFtPct: { type: GraphQLFloat },
+        drivePts: { type: GraphQLFloat },
+        drivePtsPct: { type: GraphQLFloat },
+        drivePasses: { type: GraphQLFloat },
+        drivePassesPct: { type: GraphQLFloat },
+        driveAst: { type: GraphQLFloat },
+        driveAstPct: { type: GraphQLFloat },
+        driveTov: { type: GraphQLFloat },
+        driveTovPct: { type: GraphQLFloat },
+        drivePf: { type: GraphQLFloat },
+        drivePfPct: { type: GraphQLFloat }
+    }),
+})
+
+const passing = new GraphQLObjectType({
+    name: "passing",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        passesMade: { type: GraphQLFloat },
+        passesReceived: { type: GraphQLFloat },
+        ast: { type: GraphQLFloat },
+        ftAst: { type: GraphQLFloat },
+        secondaryAst: { type: GraphQLFloat },
+        potentialAst: { type: GraphQLFloat },
+        astPointsCreated: { type: GraphQLFloat },
+        astAdj: { type: GraphQLFloat },
+        astToPassPct: { type: GraphQLFloat },
+        astToPassPctAdj: { type: GraphQLFloat }
+    }),
+})
+
+const possessions = new GraphQLObjectType({
+    name: "possessions",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        touches: { type: GraphQLFloat },
+        frontCtTouches: { type: GraphQLFloat },
+        timeOfPoss: { type: GraphQLFloat },
+        avgSecPerTouch: { type: GraphQLFloat },
+        avgDribPerTouch: { type: GraphQLFloat },
+        ptsPerTouch: { type: GraphQLFloat },
+        elbowTouches: { type: GraphQLFloat },
+        postTouches: { type: GraphQLFloat },
+        paintTouches: { type: GraphQLFloat },
+        ptsPerElbowTouch: { type: GraphQLFloat },
+        ptsPerPostTouch: { type: GraphQLFloat },
+        ptsPerPaintTouch: { type: GraphQLFloat }
+    }),
+})
+
+const rebounding = new GraphQLObjectType({
+    name: "rebounding",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        oreb: { type: GraphQLFloat },
+        orebContest: { type: GraphQLFloat },
+        orebUncontest: { type: GraphQLFloat },
+        orebContestPct: { type: GraphQLFloat },
+        orebChances: { type: GraphQLFloat },
+        orebChancePct: { type: GraphQLFloat },
+        orebChanceDefer: { type: GraphQLFloat },
+        orebChancePctAdj: { type: GraphQLFloat },
+        avgOrebDist: { type: GraphQLFloat },
+        dreb: { type: GraphQLFloat },
+        drebContest: { type: GraphQLFloat },
+        drebUncontest: { type: GraphQLFloat },
+        drebContestPct: { type: GraphQLFloat },
+        drebChances: { type: GraphQLFloat },
+        drebChancePct: { type: GraphQLFloat },
+        drebChanceDefer: { type: GraphQLFloat },
+        drebChancePctAdj: { type: GraphQLFloat },
+        avgDrebDist: { type: GraphQLFloat },
+        reb: { type: GraphQLFloat },
+        rebContest: { type: GraphQLFloat },
+        rebUncontest: { type: GraphQLFloat },
+        rebContestPct: { type: GraphQLFloat },
+        rebChances: { type: GraphQLFloat },
+        rebChancePct: { type: GraphQLFloat },
+        rebChanceDefer: { type: GraphQLFloat },
+        rebChancePctAdj: { type: GraphQLFloat },
+        avgRebDist: { type: GraphQLFloat }
+    }),
+})
+
+const defense = new GraphQLObjectType({
+    name: "defense",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        stl: { type: GraphQLFloat },
+        blk: { type: GraphQLFloat },
+        dreb: { type: GraphQLFloat },
+        defRimFgm: { type: GraphQLFloat },
+        defRimFga: { type: GraphQLFloat },
+        defRimFgPct: { type: GraphQLFloat }
+    }),
+})
+
+const efficiency = new GraphQLObjectType({
+    name: "efficiency",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        points: { type: GraphQLFloat },
+        drivePts: { type: GraphQLFloat },
+        driveFgPct: { type: GraphQLFloat },
+        catchShootPts: { type: GraphQLFloat },
+        catchShootFgPct: { type: GraphQLFloat },
+        pullUpPts: { type: GraphQLFloat },
+        pullUpFgPct: { type: GraphQLFloat },
+        paintTouchPts: { type: GraphQLFloat },
+        paintTouchFgPct: { type: GraphQLFloat },
+        postTouchPts: { type: GraphQLFloat },
+        postTouchFgPct: { type: GraphQLFloat },
+        elbowTouchPts: { type: GraphQLFloat },
+        elbowTouchFgPct: { type: GraphQLFloat },
+        effFgPct: { type: GraphQLFloat }
+    }),
+})
+
+const pullupshooting = new GraphQLObjectType({
+    name: "pullupshooting",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        pullUpFgm: { type: GraphQLFloat },
+        pullUpFga: { type: GraphQLFloat },
+        pullUpFgPct: { type: GraphQLFloat },
+        pullUpPts: { type: GraphQLFloat },
+        pullUpFg3m: { type: GraphQLFloat },
+        pullUpFg3a: { type: GraphQLFloat },
+        pullUpFg3Pct: { type: GraphQLFloat },
+        pullUpEfgPct: { type: GraphQLFloat },
+    }),
+})
+
+const PlayerTracking = new GraphQLObjectType({
+    name: "playerTracking",
+    fields: () => ({
+        playerId: { type: GraphQLInt },
+        playerName: { type: GraphQLString },
+        teamId: { type: GraphQLInt },
+        teamAbbreviation: { type: GraphQLString },
+        gp: { type: GraphQLInt },
+        w: { type: GraphQLInt },
+        l: { type: GraphQLInt },
+        min: { type: GraphQLFloat },
+        // catchShoot: {
+        //     type: catchShoot,
+        //     resolve: (parent) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "CatchShoot"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === parent.playerId))
+        //     }
+        // }
+        // drives: {
+        //     type: drives,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "Drives"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+        // possessions: {
+        //     type: possessions,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "Possessions"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+        // pullUpShots: {
+        //     type: pullupshooting,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "PullUpShots"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+        // efficiency: {
+        //     type: efficiency,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "Efficiency"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+        // defense: {
+        //     type: defense,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "Defense"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+        // rebounding: {
+        //     type: rebounding,
+        //     resolve: (player) => {
+        //         return nba.stats.playerTracking({PtMeasureType: "Rebounding"}).then((data) => 
+        //         data.leagueDashPtStats.find(player => player.playerId === catchShoot.playerId))
+        //     }
+        // }
+    })
+})
+
+
 
 // const Rankings = new GraphQLObjectType({
 //     name: 'Rankings',
@@ -676,10 +946,18 @@ const RootQuery = new GraphQLObjectType({
                 })
             )
         },
-        // topStats: {
-        //     type: new GraphQLObjectType(TopStats),
-        //     resolve: () => obj
-        // }
+        standings: {
+            type: new GraphQLList(Standings),
+            resolve: () => nba.data.standings().then((data) => data.league.standard.teams)
+        },
+        playerTracking: {
+            type: new GraphQLList(PlayerTracking),
+            resolve: () => nba.stats.playerTracking({PtMeasureType: "CatchShoot"}).then((data) => data['leagueDashPtStats'])
+        },
+        topStats: {
+            type: TopStats,
+            resolve: () => tempFunction()
+        }
         // rankings: {
         //     type: new GraphQLList(Rankings),
         //     resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data["seasonRankingsRegulatSeason"])
@@ -691,6 +969,16 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.leagueGameLog({PlayerOrTeam:"P"}).then((data)=> console.log(data))
 //nba.stats.leagueLeaders({PlayerOrTeam:"P", StatCategory:"REB"}).then((data)=> console.log(data))
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
+
+let listOfTracking = ["Drives", "CatchShoot", "Passing", "PullupShot", "Possessions", "Rebounding", "Defense","Efficiency", "SpeedDistance", "ElbowTouch", "PostTouch", "PaintTouch"]
+// nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
+//nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
+//nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
+//nba.stats.playByPlay({GameID: "0021401082"}).then((data) => console.log(data))
+
+
+
+
 
 
 //Function for creating top 30, top 60, top 100

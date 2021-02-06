@@ -35,70 +35,39 @@ const Player_Query = gql`
             teamName
             teamCity
         }
-        currentStats {
-            playerId
-            playerName
-            teamId
-            teamAbbreviation
-            age
-            gp
-            w
-            l
-            wPct
-            min
-            fgm
-            fga
-            fgPct
-            fG3M
-            fG3A
-            fg3Pct
-            ftm
-            fta
-            ftPct
-            oreb
-            dreb
-            reb
-            ast
-            tov
-            stl
-            blk
-            blka
-            pf
-            pfd
-            pts
-            plusMinus
-            nbaFantasyPts
-            dD2
-            tD3
-            gpRank
-            wRank
-            lRank
-            wPctRank
-            minRank
-            fgmRank
-            fgaRank
-            fgPctRank
-            fg3mRank
-            fg3aRank
-            fg3PctRank
-            ftmRank
-            ftaRank
-            ftPctRank
-            orebRank
-            drebRank
-            rebRank
-            astRank
-            tovRank
-            stlRank
-            blkRank
-            blkaRank
-            pfRank
-            pfdRank
-            ptsRank
-            plusMinusRank
-            nbaFantasyPtsRank
-            dd2Rank
-            td3Rank
+          topStats{
+            top30 {
+                pts:PTS
+                reb:REB
+                ast:AST
+                stl:STL
+                blk:BLK
+                tov:TOV
+            }
+            top70 {
+                pts:PTS
+                reb:REB
+                ast:AST
+                stl:STL
+                blk:BLK
+                tov:TOV
+            }
+            top120 {
+                pts:PTS
+                reb:REB
+                ast:AST
+                stl:STL
+                blk:BLK
+                tov:TOV
+            }
+            top180 {
+                pts:PTS
+                reb:REB
+                ast:AST
+                stl:STL
+                blk:BLK
+                tov:TOV
+            }
           }
           leagueGameLog(playerName: $playerName) {
             resource,
@@ -132,10 +101,11 @@ function Player() {
     });
     const [dataLoaded, setDataLoaded] = useState(false);
     
-    var temp_arr = []
-    var temp_arr1 = []
     useEffect(() => {
+        setDataLoaded(false)
         if (!loading) {
+            var temp_arr = []
+            var temp_arr1 = []
             temp_arr = data['historicStats'].filter((item) =>
                 (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
                 item.seasonId !== "2020-21"
@@ -169,7 +139,7 @@ function Player() {
     if (loading) return 'Loading...';
 
     if (dataLoaded) {
-        console.log(playerGames)
+        console.log(seasonStats)
     }
 
     return (
