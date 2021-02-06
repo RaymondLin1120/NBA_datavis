@@ -3,6 +3,10 @@ import { IconContext } from 'react-icons/lib';
 import { MdSearch } from 'react-icons/md';
 
 function SearchBar(props) {
+    function handleSearch(e) {
+        props.setCurrentPlayer(e.target.value)
+        props.setDataLoaded(false);
+    }
     return (
         <div className = "toolbarContainer">
             <form className = "searchBar">
@@ -15,7 +19,7 @@ function SearchBar(props) {
                         }}
                         onKeyDown = {(e) => {
                             if (e.key === 'Enter') {
-                                props.setCurrentPlayer(e.target.value)
+                                handleSearch(e);
                             }}}>
                     </input>
                     <IconContext.Provider value = {{ size: '25px'}}>

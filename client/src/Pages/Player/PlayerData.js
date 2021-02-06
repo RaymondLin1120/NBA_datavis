@@ -1,0 +1,117 @@
+import { gql } from "@apollo/client";
+
+export const Player_Query = gql`
+    query PlayerQuery ($playerName: String = "Bradley Beal") {
+        historicStats (playerName: $playerName) {
+            playerId
+            seasonId
+            pts
+            reb
+            ast
+            fG3M
+            stl
+            blk
+            min
+            tov
+            fga
+            fG3A
+            fgPct
+            ftPct
+            fg3Pct
+            fta
+            teamAbbreviation
+        }
+        playerInfo (playerName: $playerName) {
+            personId
+            displayFirstLast
+            jersey
+            position
+            teamName
+            teamCity
+        }
+        currentStats {
+            playerId
+            playerName
+            teamId
+            teamAbbreviation
+            age
+            gp
+            w
+            l
+            wPct
+            min
+            fgm
+            fga
+            fgPct
+            fG3M
+            fG3A
+            fg3Pct
+            ftm
+            fta
+            ftPct
+            oreb
+            dreb
+            reb
+            ast
+            tov
+            stl
+            blk
+            blka
+            pf
+            pfd
+            pts
+            plusMinus
+            nbaFantasyPts
+            dD2
+            tD3
+            gpRank
+            wRank
+            lRank
+            wPctRank
+            minRank
+            fgmRank
+            fgaRank
+            fgPctRank
+            fg3mRank
+            fg3aRank
+            fg3PctRank
+            ftmRank
+            ftaRank
+            ftPctRank
+            orebRank
+            drebRank
+            rebRank
+            astRank
+            tovRank
+            stlRank
+            blkRank
+            blkaRank
+            pfRank
+            pfdRank
+            ptsRank
+            plusMinusRank
+            nbaFantasyPtsRank
+            dd2Rank
+            td3Rank
+          }
+          leagueGameLog(playerName: $playerName) {
+            resource,
+            parameters {
+              LeagueID
+              Season
+              SeasonType
+              PlayerOrTeam
+              Counter
+              Sorter
+              Direction
+              DateFrom
+              DateTo
+            },
+            resultSets {
+              name
+              headers
+              rowSet
+            }
+        }
+    }
+`
