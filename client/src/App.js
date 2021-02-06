@@ -68,7 +68,7 @@ function App() {
             <Sidebar />
             <Switch>
               <Route exact path='/Home' component = {Home} />
-              <Route exact path='/Player' component = {Player} />
+              <Route exact path='/Player/:name' render={(props) => (<Player name={props.match.params.name} />)} />
               <Route exact path='/Games' component = {Games} />
               <Route component={() => 404} />
             </Switch>  

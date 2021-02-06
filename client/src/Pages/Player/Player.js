@@ -7,6 +7,7 @@ import Boxscores from '../../Components/Graphing/Boxscores'
 import { MdBlock } from 'react-icons/md';
 
 const Player_Query = gql`
+<<<<<<< HEAD
     query PlayerQuery ($playerName: String = "Bradley Beal") {
         historicStats (playerName: $playerName) {
             playerId
@@ -87,14 +88,131 @@ const Player_Query = gql`
               headers
               rowSet
             }
+=======
+query PlayerQuery ($playerName: String = "Bradley Beal") {
+    historicStats (playerName: $playerName) {
+        playerId
+        seasonId
+        pts
+        reb
+        ast
+        fG3M
+        stl
+        blk
+        min
+        tov
+        fga
+        fG3A
+        fgPct
+        ftPct
+        fg3Pct
+        fta
+        teamAbbreviation
+    }
+    playerInfo (playerName: $playerName) {
+        personId
+        displayFirstLast
+        jersey
+        position
+        teamName
+        teamCity
+    }
+    currentStats {
+        playerId
+        playerName
+        teamId
+        teamAbbreviation
+        age
+        gp
+        w
+        l
+        wPct
+        min
+        fgm
+        fga
+        fgPct
+        fG3M
+        fG3A
+        fg3Pct
+        ftm
+        fta
+        ftPct
+        oreb
+        dreb
+        reb
+        ast
+        tov
+        stl
+        blk
+        blka
+        pf
+        pfd
+        pts
+        plusMinus
+        nbaFantasyPts
+        dD2
+        tD3
+        gpRank
+        wRank
+        lRank
+        wPctRank
+        minRank
+        fgmRank
+        fgaRank
+        fgPctRank
+        fg3mRank
+        fg3aRank
+        fg3PctRank
+        ftmRank
+        ftaRank
+        ftPctRank
+        orebRank
+        drebRank
+        rebRank
+        astRank
+        tovRank
+        stlRank
+        blkRank
+        blkaRank
+        pfRank
+        pfdRank
+        ptsRank
+        plusMinusRank
+        nbaFantasyPtsRank
+        dd2Rank
+        td3Rank
+      }
+      leagueGameLog(playerName: $playerName) {
+        resource,
+        parameters {
+          LeagueID
+          Season
+          SeasonType
+          PlayerOrTeam
+          Counter
+          Sorter
+          Direction
+          DateFrom
+          DateTo
+        },
+        resultSets {
+          name
+          headers
+          rowSet
+>>>>>>> b933ac83a456ea295310abf1178e7890e8d98332
         }
     }
+}
 `
-function Player() {
+
+function Player(props) {
+
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
-    const [currentPlayer, setCurrentPlayer] = useState();
+    const [currentPlayer, setCurrentPlayer] = useState(useParams());
+
+    const history = useHistory();
 
     const { loading, error, data } = useQuery(Player_Query, {
         variables: {playerName: currentPlayer}
@@ -144,7 +262,8 @@ function Player() {
 
     return (
         <div className = "playerPageContainer">
-            <SearchBar setCurrentPlayer = {setCurrentPlayer}/>
+            {props.name}
+            <SearchBar setCurrentPlayer = {setCurrentPlayer} setDataLoaded={setDataLoaded} playerInfo={playerInfo} />
             {(dataLoaded && !error)  && 
                 <>
                 <div className="playerDashboard">
