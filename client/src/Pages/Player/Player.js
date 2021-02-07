@@ -4,11 +4,14 @@ import { useQuery, gql } from "@apollo/client";
 import RadarStats from '../../Components/Graphing/RadarStats'
 import SearchBar from '../../Components/SearchBar/SearchBar'
 import Boxscores from '../../Components/Graphing/Boxscores'
+import nba from 'nba';
+import { useParams } from 'react-router-dom'
 import { MdBlock } from 'react-icons/md';
+import PlayerHome from './PlayerHome'
 
 const Player_Query = gql`
-    query PlayerQuery ($playerName: String = "Bradley Beal") {
-        historicStats (playerName: $playerName) {
+    query PlayerQuery ($playerId: Int!) {
+        historicStats (playerId: $playerId) {
             playerId
             seasonId
             pts
@@ -27,53 +30,80 @@ const Player_Query = gql`
             fta
             teamAbbreviation
         }
-        playerInfo (playerName: $playerName) {
-            playerId:personId
+        playerInfo (playerId: $playerId) {
+            personId
             displayFirstLast
             jersey
             position
             teamName
             teamCity
         }
-        topStats{
-            top30 {
-                seasonId
-                pts:PTS
-                reb:REB
-                ast:AST
-                stl:STL
-                blk:BLK
-                tov:TOV
-            }
-            top70 {
-                seasonId
-                pts:PTS
-                reb:REB
-                ast:AST
-                stl:STL
-                blk:BLK
-                tov:TOV
-            }
-            top120 {
-                seasonId
-                pts:PTS
-                reb:REB
-                ast:AST
-                stl:STL
-                blk:BLK
-                tov:TOV
-            }
-            top180 {
-                seasonId
-                pts:PTS
-                reb:REB
-                ast:AST
-                stl:STL
-                blk:BLK
-                tov:TOV
-            }
+        currentStats {
+            playerId
+            playerName
+            teamId
+            teamAbbreviation
+            age
+            gp
+            w
+            l
+            wPct
+            min
+            fgm
+            fga
+            fgPct
+            fG3M
+            fG3A
+            fg3Pct
+            ftm
+            fta
+            ftPct
+            oreb
+            dreb
+            reb
+            ast
+            tov
+            stl
+            blk
+            blka
+            pf
+            pfd
+            pts
+            plusMinus
+            nbaFantasyPts
+            dD2
+            tD3
+            gpRank
+            wRank
+            lRank
+            wPctRank
+            minRank
+            fgmRank
+            fgaRank
+            fgPctRank
+            fg3mRank
+            fg3aRank
+            fg3PctRank
+            ftmRank
+            ftaRank
+            ftPctRank
+            orebRank
+            drebRank
+            rebRank
+            astRank
+            tovRank
+            stlRank
+            blkRank
+            blkaRank
+            pfRank
+            pfdRank
+            ptsRank
+            plusMinusRank
+            nbaFantasyPtsRank
+            dd2Rank
+            td3Rank
           }
-          leagueGameLog(playerName: $playerName) {
+          leagueGameLog(playerId: $playerId) {
             resource,
             parameters {
               LeagueID
@@ -93,58 +123,58 @@ const Player_Query = gql`
             }
         }
     }
-}
 `
 
-function Player(props) {
-
+function Player({match}) {
+    const { id } = match.params;
     const [seasonStats, setSeasonStats] = useState([])
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
-    const [topStats, setTopStats] =useState([])
-    const [currentPlayer, setCurrentPlayer] = useState(useParams())
-
-    const history = useHistory();
+    const [topStats, setTopStats] = useState([])
+    const [currentPlayer, setCurrentPlayer] = useState(parseInt(id));
 
     const { loading, error, data } = useQuery(Player_Query, {
-        variables: {playerName: currentPlayer}
+        variables: {playerId: currentPlayer}
     });
+
     const [dataLoaded, setDataLoaded] = useState(false);
     
     useEffect(() => {
         setDataLoaded(false)
-        if (!loading) {
-            var temp_arr = []
-            var temp_arr1 = []
-            temp_arr = data['historicStats'].filter((item) =>
-                (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
-                item.seasonId !== "2020-21"
-            )
-            setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
-            setPlayerInfo(data['playerInfo'])
-            //setPlayerGames(data['leagueGameLog']['resultSets'])
-            data['leagueGameLog']['resultSets'][0]['rowSet'].map((item) => (
-                temp_arr1.push({
-                    gameID:item[6],
-                    date: item[7],
-                    matchup: item[8],
-                    wl:item[9],
-                    fgPct:parseFloat(item[13]*100).toFixed(1)+"%",
-                    fg3Pct:parseFloat(item[16]*100).toFixed(1)+"%",
-                    ftPct:parseFloat(item[19]*100).toFixed(1)+"%",
-                    min:item[10],
-                    reb:item[22],
-                    ast:item[23],
-                    blk:item[25],
-                    stl:item[24],
-                    tov:item[26],
-                    pf:item[27],
-                    pts:item[28]
-                })
-            ))
-            setPlayerGames(temp_arr1)
-            setTopStats(data.topStats)
-            setDataLoaded(true);
+        if (id) {
+            if (!loading) {
+                var temp_arr = []
+                var temp_arr1 = []
+                temp_arr = data['historicStats'].filter((item) =>
+                    (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
+                    item.seasonId !== "2020-21"
+                )
+                setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
+                setPlayerInfo(data['playerInfo'])
+                //setPlayerGames(data['leagueGameLog']['resultSets'])
+                data['leagueGameLog']['resultSets'][0]['rowSet'].map((item) => (
+                    temp_arr1.push({
+                        gameID:item[6],
+                        date: item[7],
+                        matchup: item[8],
+                        wl:item[9],
+                        fgPct:parseFloat(item[13]*100).toFixed(1)+"%",
+                        fg3Pct:parseFloat(item[16]*100).toFixed(1)+"%",
+                        ftPct:parseFloat(item[19]*100).toFixed(1)+"%",
+                        min:item[10],
+                        reb:item[22],
+                        ast:item[23],
+                        blk:item[25],
+                        stl:item[24],
+                        tov:item[26],
+                        pf:item[27],
+                        pts:item[28]
+                    })
+                ))
+                setPlayerGames(temp_arr1)
+                setTopStats(data.topStats)
+                setDataLoaded(true);
+            }
         }
     }, [data]);
     if (loading) return 'Loading...';
@@ -155,9 +185,9 @@ function Player(props) {
 
     return (
         <div className = "playerPageContainer">
-            {props.name}
             <SearchBar setCurrentPlayer = {setCurrentPlayer} setDataLoaded={setDataLoaded} playerInfo={playerInfo} />
-            {(dataLoaded && !error)  && 
+            { !id && <PlayerHome />}
+            {(dataLoaded && !error && id)  && 
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
@@ -165,8 +195,9 @@ function Player(props) {
                     <Boxscores data = {playerGames} />
                 </div>
             </>}
-            { error && <div> {error.message} </div>}
-            { !dataLoaded  && <div>Loading</div> }
+            { error && id && <div> {error.message} </div>}
+            { !dataLoaded && id && <div>Loading</div> }
+            
          </div>
     )
 }

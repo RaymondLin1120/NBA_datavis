@@ -13,6 +13,7 @@ import {onError} from '@apollo/client/link/error'
 import Home from './Pages/Home'
 import Player from './Pages/Player/Player'
 import Games from './Pages/Games/Games'
+import PlayerHome from './Pages/Player/PlayerHome';
 
 const errorLink = onError(({ graphqlErrors, networkError}) => {
   if (graphqlErrors) {
@@ -68,7 +69,8 @@ function App() {
             <Sidebar />
             <Switch>
               <Route exact path='/Home' component = {Home} />
-              <Route exact path='/Player/:name' render={(props) => (<Player name={props.match.params.name} />)} />
+              {/* <Route exact path='/Player' component = {PlayerHome} /> */}
+              <Route exact path='/Player/:id?' component = {Player} />
               <Route exact path='/Games' component = {Games} />
               <Route component={() => 404} />
             </Switch>  

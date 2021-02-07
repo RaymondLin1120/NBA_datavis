@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import nba from 'nba'
 export default function PlayerProfile(props) {
-    useEffect(() => {
-        console.log(props.playerInfo)
-    }, [])
     return (
         <section className="playerInfo-container">
         <div className="player-headshot">
