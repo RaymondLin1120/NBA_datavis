@@ -38,72 +38,36 @@ const Player_Query = gql`
             teamName
             teamCity
         }
-        currentStats {
-            playerId
-            playerName
-            teamId
-            teamAbbreviation
-            age
-            gp
-            w
-            l
-            wPct
-            min
-            fgm
-            fga
-            fgPct
-            fG3M
-            fG3A
-            fg3Pct
-            ftm
-            fta
-            ftPct
-            oreb
-            dreb
-            reb
-            ast
-            tov
-            stl
-            blk
-            blka
-            pf
-            pfd
-            pts
-            plusMinus
-            nbaFantasyPts
-            dD2
-            tD3
-            gpRank
-            wRank
-            lRank
-            wPctRank
-            minRank
-            fgmRank
-            fgaRank
-            fgPctRank
-            fg3mRank
-            fg3aRank
-            fg3PctRank
-            ftmRank
-            ftaRank
-            ftPctRank
-            orebRank
-            drebRank
-            rebRank
-            astRank
-            tovRank
-            stlRank
-            blkRank
-            blkaRank
-            pfRank
-            pfdRank
-            ptsRank
-            plusMinusRank
-            nbaFantasyPtsRank
-            dd2Rank
-            td3Rank
+        topStats {
+            top30 {
+              seasonId
+              pts: PTS
+              reb: REB
+              ast: AST
+              stl: STL
+              blk: BLK
+              tov: TOV
+            }
+            top70 {
+              seasonId
+              pts: PTS
+              reb: REB
+              ast: AST
+              stl: STL
+              blk: BLK
+              tov: TOV
+            }
+            top120 {
+              seasonId
+              pts: PTS
+              reb: REB
+              ast: AST
+              stl: STL
+              blk: BLK
+              tov: TOV
+            }
           }
-          leagueGameLog(playerId: $playerId) {
+        leagueGameLog(playerId: $playerId) {
             resource,
             parameters {
               LeagueID
@@ -145,6 +109,7 @@ function Player({match}) {
             if (!loading) {
                 var temp_arr = []
                 var temp_arr1 = []
+                var temp_arr2 = []
                 temp_arr = data['historicStats'].filter((item) =>
                     (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
                     item.seasonId !== "2020-21"
@@ -172,7 +137,13 @@ function Player({match}) {
                     })
                 ))
                 setPlayerGames(temp_arr1)
-                setTopStats(data.topStats)
+                for (var key of Object.keys(data.topStats)) {
+                    if (key !== "__typename") {
+                        console.log(key)
+                        temp_arr2.push(data.topStats[key])
+                    }
+                }
+                setTopStats(temp_arr2)
                 setDataLoaded(true);
             }
         }
@@ -191,7 +162,7 @@ function Player({match}) {
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
-                    <RadarStats config = {seasonStats} style = {{height:'350px', width:'900px'}} size = {100}/>
+                    <RadarStats config = {seasonStats} statData = {topStats} style = {{height:'350px', width:'750px'}} size = {100}/>
                     <Boxscores data = {playerGames} />
                 </div>
             </>}
