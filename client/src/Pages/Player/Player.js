@@ -30,6 +30,71 @@ const Player_Query = gql`
             fta
             teamAbbreviation
         }
+        currentStats {
+            playerId
+            playerName
+            teamId
+            teamAbbreviation
+            age
+            gp
+            w
+            l
+            wPct
+            min
+            fgm
+            fga
+            fgPct
+            fG3M
+            fG3A
+            fg3Pct
+            ftm
+            fta
+            ftPct
+            oreb
+            dreb
+            reb
+            ast
+            tov
+            stl
+            blk
+            blka
+            pf
+            pfd
+            pts
+            plusMinus
+            nbaFantasyPts
+            dD2
+            tD3
+            gpRank
+            wRank
+            lRank
+            wPctRank
+            minRank
+            fgmRank
+            fgaRank
+            fgPctRank
+            fg3mRank
+            fg3aRank
+            fg3PctRank
+            ftmRank
+            ftaRank
+            ftPctRank
+            orebRank
+            drebRank
+            rebRank
+            astRank
+            tovRank
+            stlRank
+            blkRank
+            blkaRank
+            pfRank
+            pfdRank
+            ptsRank
+            plusMinusRank
+            nbaFantasyPtsRank
+            dd2Rank
+            td3Rank
+        }
         playerInfo (playerId: $playerId) {
             personId
             displayFirstLast
@@ -66,6 +131,15 @@ const Player_Query = gql`
               blk: BLK
               tov: TOV
             }
+            top180 {
+                seasonId
+                pts: PTS
+                reb: REB
+                ast: AST
+                stl: STL
+                blk: BLK
+                tov: TOV
+            }
           }
         leagueGameLog(playerId: $playerId) {
             resource,
@@ -95,6 +169,7 @@ function Player({match}) {
     const [playerInfo, setPlayerInfo] = useState([])
     const [playerGames, setPlayerGames] = useState([])
     const [topStats, setTopStats] = useState([])
+    
     const [currentPlayer, setCurrentPlayer] = useState(parseInt(id));
 
     const { loading, error, data } = useQuery(Player_Query, {
@@ -111,12 +186,13 @@ function Player({match}) {
                 var temp_arr1 = []
                 var temp_arr2 = []
                 temp_arr = data['historicStats'].filter((item) =>
-                    (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
-                    item.seasonId !== "2020-21"
+                    item.seasonId === "2020-21"
+                    // (item.seasonId === "2020-21" && item.teamAbbreviation === "TOT") || 
+                    // item.seasonId !== "2020-21"
                 )
-                setSeasonStats(temp_arr.slice(temp_arr.length - 3, temp_arr.length))
+                setSeasonStats(temp_arr.slice(temp_arr.length - 1, temp_arr.length))
                 setPlayerInfo(data['playerInfo'])
-                //setPlayerGames(data['leagueGameLog']['resultSets'])
+
                 data['leagueGameLog']['resultSets'][0]['rowSet'].map((item) => (
                     temp_arr1.push({
                         gameID:item[6],
@@ -162,7 +238,7 @@ function Player({match}) {
                 <>
                 <div className="playerDashboard">
                     <PlayerProfile playerInfo={playerInfo}/>
-                    <RadarStats config = {seasonStats} statData = {topStats} style = {{height:'350px', width:'750px'}} size = {100}/>
+                    <RadarStats config = {seasonStats} statData = {topStats} style = {{height:'500px', width:'500px'}} size = {160}/>
                     <Boxscores data = {playerGames} />
                 </div>
             </>}

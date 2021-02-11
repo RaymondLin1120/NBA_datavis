@@ -4,9 +4,11 @@ import Chart from './Chart'
 import EChart from './EChart.js'
 
 function RadarStats({ config, statData, resize , style, size}) {
+    console.log(statData)
     let option = {
       title: {
-          text: 'Averages',
+          text: 'Rankings',
+          width: 100,
       },
       //backgroundColor: '#161627',
       tooltip: {
@@ -15,17 +17,20 @@ function RadarStats({ config, statData, resize , style, size}) {
       legend: {
         type: 'scroll',
         data: config['seasonId'],
+        width: 320,
+        left:'30%',
         selected: {
             "top70": false,
-            "top120": false
+            "top120": false,
+            "top180": false
         }
       },
-      toolbox: {
-        show: true,
-        feature: {
-            saveAsImage: {}
-        }
-      },
+    //   toolbox: {
+    //     show: true,
+    //     feature: {
+    //         saveAsImage: {}
+    //     }
+    //   },
       responsive:true,
 
       radar: [{
@@ -42,11 +47,31 @@ function RadarStats({ config, statData, resize , style, size}) {
           radius: size,
           //center: ['25%', '50%'],
           indicator: [
-              { name: 'Points', max: statData[0].pts + statData[0].pts/2},
-              { name: 'Rebounds', max: statData[0].reb + statData[0].reb/2},
-              { name: 'Assists', max: statData[0].ast + statData[0].ast/2},
-              { name: 'Steals', max: statData[0].stl + statData[0].stl/2},
-              { name: 'Blocks', max: statData[0].blk + statData[0].blk/2},
+            {
+                name: 'Points', 
+                min: Math.min(statData[statData.length - 1].pts, config[config.length - 1].pts),
+                max: Math.max(statData[0].pts + statData[0].pts/6,config[config.length - 1].pts)
+            },
+            { 
+                name: 'Rebounds',
+                min: Math.min(statData[statData.length - 1].reb, config[config.length - 1].reb),
+                max: Math.max(statData[0].reb + statData[0].reb/6,config[config.length - 1].reb)
+            },
+            {
+                name: 'Assists',
+                min: Math.min(statData[statData.length - 1].ast, config[config.length - 1].ast),
+                max: Math.max(statData[0].ast + statData[0].ast/6,config[config.length - 1].ast)
+            },
+            {
+                name: 'Steals', min: statData[statData.length - 1].stl,
+                min: Math.min(statData[statData.length - 1].stl, config[config.length - 1].stl),
+                max: Math.max(statData[0].stl + statData[0].stl/6,config[config.length - 1].stl)
+            },
+            {
+                name: 'Blocks',
+                min: Math.min(statData[statData.length - 1].blk, config[config.length - 1].blk),
+                max: Math.max(statData[0].blk + statData[0].blk/6,config[config.length - 1].blk)
+            }
           ]
       }],
     //   {
@@ -73,21 +98,37 @@ function RadarStats({ config, statData, resize , style, size}) {
       series: [
         {
             type: 'radar',
-            areaStyle: {normal: {}},
-            data: 
-                statData.map((item) => ({
-                    value: [item.pts, item.reb, item.ast, item.stl, item.blk], 
-                    name: item.seasonId
-                }))
-        },
-        {
-            type: 'radar',
             //areaStyle: {normal: {}},
             data: 
                 config.map((item) => ({
                     value: [item.pts, item.reb, item.ast, item.stl, item.blk], 
                     name: item.seasonId
                 })),
+            itemStyle : {
+                normal : {
+                    label : {
+                        show: true, position: 'inner',
+                        offset: [10, 0],
+                        fontSize: 14,
+                        fontWeight:'bold'
+                        // formatter : function (params){
+                        //           return  params.value + '%\n'
+                        //     },
+                    },
+                    labelLine : {
+                        show : true
+                    }
+                }
+            }
+        },
+        {
+            type: 'radar',
+            //areaStyle: {normal: {}},
+            data: 
+                statData.map((item) => ({
+                    value: [item.pts, item.reb, item.ast, item.stl, item.blk], 
+                    name: item.seasonId
+                }))
         }
     ]
     //   {

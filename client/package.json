@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.6.2",
     "axios": "^0.21.1",
     "d3": "^6.5.0",
+    "d3-shotchart": "0.0.2",
     "echarts": "^5.0.1",
     "file-loader": "^6.2.0",
     "graphql": "^15.5.0",

@@ -61,14 +61,23 @@ async function calcTopStats(cat, iterations, k) {
         // let tempObj = topCatStats;
         //console.log(data)
         let playerData = data['resultSet']['rowSet']
-        for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
-            sum =  sum + playerData[i][cat.index]
-            if (iterations[k] === (i + 1)) {
-                tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: sum/iterations[k] };
-                //tempObj['top' + iterations[k].toString()] = { [cat.cat]: (sum/iterations[k]).toFixed(2) };
-                k++;
-            }
-        }
+        // for (i = 0; i < iterations[iterations.length - 1]  ; i++ ) {
+        //     sum =  sum + playerData[i][cat.index]
+        //     if (iterations[k] === (i + 1)) {
+        //         if (k == 0) {
+        //             tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: (sum/(iterations[k])).toFixed(1)}
+        //         }
+        //         else {
+        //             tempObj['top' + iterations[k].toString()] = {...tempObj['top' + iterations[k].toString()], [cat.cat]: (sum/(iterations[k] - iterations[k-1])).toFixed(1)};
+        //         }
+        //         //tempObj['top' + iterations[k].toString()] = { [cat.cat]: (sum/iterations[k]).toFixed(2) };
+        //         sum = 0;
+        //         k++;
+        //     }
+        // }
+        iterations.map((iter) => {
+            tempObj['top' + iter.toString()] = {...tempObj['top' + iter.toString()], [cat.cat]: playerData[iter][cat.index].toFixed(1)}
+        })
         return tempObj
     })
 }
@@ -543,7 +552,8 @@ const TopStats = new GraphQLObjectType({
          top30: { type: playerStats },
          top70: { type: playerStats },
          top120: { type: playerStats },
-         top180: { type: playerStats }
+         top180: { type: playerStats },
+         top300: { type: playerStats }
     })
 })
 
