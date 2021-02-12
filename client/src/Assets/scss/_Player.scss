@@ -3,7 +3,7 @@
     flex-wrap:wrap;
     height:calc(100vh - 40px);
     overflow-y: scroll;
-    padding: 5px 20px 20px 20px;
+    //padding: 5px 20px 20px 20px;
     flex:1;
 }
 
@@ -18,49 +18,100 @@
 
 .playerInfo-container {
     display:flex;
+    width:100%;
+    color:white;
     height: fit-content;
     padding:10px;
-    background-color:#f7f7f7;
-    border-radius: 10px;
+    justify-content: space-between;
+    background-color:#000000;
+
+    .playerInfo {
+        display:flex;
+        //width: fit-content;
+        
+        .playerInfo-name {
+            font-size:40px;
+            white-space: nowrap;
+            font-family:Arial, Helvetica, sans-serif;
+            padding: 25px 0px 25px 0px;
+        }
+        .playerInfo-otherInfo {
+            font-size:16px;
+            text-align:left;
+            padding: 3px 0px 3px 0px;
+        }
+    }
+
+    //border-radius: 10px;
     // > div {
     //     margin: 10px;
     // }
-    .playerInfo {
-        width: 300px;
+    // .playerInfo {
+    //     width: 300px;
+    // }
+    // p {
+    //     text-align:left;
+    //     margin:0;
+    //     padding-bottom: 4px;
+    // }
+}
+.statBox {
+    display:block;
+    position:relative;
+    float: right;
+    margin: 20px;
+    flex-wrap:wrap;
+    height: fit-content;
+    color: black;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    background-color:#ffffff;
+
+    .statBox-container {
+        display:flex;
+        height: 80%;
+        align-items: center;
+        justify-content:center;
     }
-    p {
-        text-align:left;
-        margin:0;
-        padding-bottom: 4px;
+}
+
+.statBox-title {
+    position:relative;
+    height:20%;
+    width:inherit;
+    font-size:20px;
+    margin:0;
+    text-align: center;
+    justify-content:center;
+    align-items:center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color:#e66a6a;
+
+    > p {
+        margin: 0;
     }
 }
 
 .statBox-outline {
     display:block;
-    height:80px;
-    width: 80px;
-    margin:0;
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
+    height:70px;
+    margin:15px;
+    // border-style: solid;
+    // border-color: black;
+    // border-width: 1px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 
     .statBox-value {
-        height:80%;
         padding:0;
-        font-size: 20px;
-        font-weight: 600;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .statBox-title {
-        position:relative;
-        height:20%;
-        width:inherit;
-        padding:0;
-        text-align: center;
-        font-size:12px;
-        background-color:#32c5ff;
+        font-size: 25px;
+        font-weight: 500;
     }
 }
+
+
+

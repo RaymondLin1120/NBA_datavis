@@ -2,26 +2,44 @@ import React, { useEffect } from 'react';
 import nba from 'nba'
 
 export default function PlayerProfile(props) {
+    
+    let cats = ['min', 'pts', 'reb', 'ast', 'stl', 'blk']
+    let statData = props.seasonStats[0]
+    console.log(props.playerInfo)
+    console.log(statData)
     return (
         <section className="playerInfo-container">
-        <div className="player-headshot">
-            <img src = {`https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${props.playerInfo[0].personId}.png`}></img>
-            {/* <p> {props.playerInfo[0].personId} </p>
-            <p> {nba.teamIdFromName("Washington Wizards")} </p>
-            <p> {props.playerInfo.displayFirstLast}</p> */}
-        </div>
 
-        <div className="playerInfo">
-            <p> Name: {props.playerInfo[0].displayFirstLast} </p>
-            <p> Team: {props.playerInfo[0].teamCity} {props.playerInfo[0].teamName} </p>
-            <p> Position: {props.playerInfo[0].position} </p>
-            <p> Jersey: {props.playerInfo[0].jersey} </p>
-        </div>
+            <div className="playerInfo">
+                <img src = {`https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${props.playerInfo[0].personId}.png`}></img>
+                <div>
+                    <div className="playerInfo-name"> {props.playerInfo[0].displayFirstLast} </div>
+                    <div className="playerInfo-otherInfo"> {props.playerInfo[0].teamCity} {props.playerInfo[0].teamName} </div>
+                    <div className="playerInfo-otherInfo"> Position: {props.playerInfo[0].position} </div>
+                    <div className="playerInfo-otherInfo"> Jersey: {props.playerInfo[0].jersey} </div>
+                </div>
+                {/* <p> Team: {props.playerInfo[0].teamCity} {props.playerInfo[0].teamName} </p>
+                <p> Position: {props.playerInfo[0].position} </p>
+                <p> Jersey: {props.playerInfo[0].jersey} </p> */}
+            </div>
 
-        <div className="statBox-outline">
-            <p className="statBox-value"> 32 </p>
-            <p className="statBox-title"> Points </p>
-        </div>
-    </section>
+            <div className="statBox">
+                <div className="statBox-title">
+                    <p>Current Season Stats</p>
+                </div>
+
+                <div className="statBox-container">
+                {cats.map((item) => (
+                    <>
+                        <div className="statBox-outline">
+                            <div className="statBox-value"> {props.seasonStats[0][item]} </div>
+                            <div> {item.toUpperCase()} </div>
+                        </div>
+                    </>
+                ))}
+                </div>
+            </div>
+
+        </section>
     )
 }

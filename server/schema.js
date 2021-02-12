@@ -1096,11 +1096,11 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
 
 let listOfTracking = ["Drives", "CatchShoot", "Passing", "PullupShot", "Possessions", "Rebounding", "Defense","Efficiency", "SpeedDistance", "ElbowTouch", "PostTouch", "PaintTouch"]
-//nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
-//nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
-//nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
+nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
+nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
+nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
 //nba.stats.playByPlay({GameID: "0021401082"}).then((data) => console.log(data))
-//nba.stats.shots({ PlayerID: 201939 }).then((data) => console.log(data['shot_Chart_Detail']))
+nba.stats.shots({ PlayerID: 201939 }).then((data) => console.log(data['shot_Chart_Detail']))
 
 
 

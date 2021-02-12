@@ -169,7 +169,8 @@ function Table({ columns, data }) {
 
 function Boxscores(data) {
     return (
-        <div>
+        <div className = "boxscore-container">
+            <p className="title"> Boxscores </p>
             <Table columns={columns} data={data.data} /> 
         </div>
     )
