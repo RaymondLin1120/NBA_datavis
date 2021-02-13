@@ -19,26 +19,38 @@
 .playerInfo-container {
     display:flex;
     width:100%;
-    color:white;
+    color:#FFF;
     height: fit-content;
     padding:10px;
+    flex-direction: row-reverse;
     justify-content: space-between;
+    align-items: center;
     background-color:#000000;
+    padding-inline-start: 15%;
+    padding-inline-end: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+
 
     .playerInfo {
         display:flex;
         //width: fit-content;
+        flex-direction: column;
+        align-items: center;
         
         .playerInfo-name {
             font-size:40px;
             white-space: nowrap;
             font-family:Arial, Helvetica, sans-serif;
             padding: 25px 0px 25px 0px;
+            font-weight: bolder;
         }
         .playerInfo-otherInfo {
             font-size:16px;
             text-align:left;
             padding: 3px 0px 3px 0px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -54,6 +66,17 @@
     //     margin:0;
     //     padding-bottom: 4px;
     // }
+
+    .team-image {
+        height: 500px;
+        width: 100%;
+        border: 1px solid red;
+        background-image: url("https://www.nba.com/.element/img/1.0/teamsites/logos/teamlogos_500x500/lal.png")
+    }
+
+    .player-team {
+        filter:grayscale(100%)
+    }
 }
 .statBox {
     display:block;
@@ -62,12 +85,13 @@
     margin: 20px;
     flex-wrap:wrap;
     height: fit-content;
-    color: black;
+    color: white;
     align-items: center;
     border-style: solid;
     border-width: 1px;
     border-radius: 20px;
-    background-color:#ffffff;
+    background-color:transparent;
+    width: 100%;
 
     .statBox-container {
         display:flex;
@@ -88,7 +112,8 @@
     align-items:center;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    background-color:#e66a6a;
+    background-color:transparent;
+    border-bottom: 1px solid white;
 
     > p {
         margin: 0;

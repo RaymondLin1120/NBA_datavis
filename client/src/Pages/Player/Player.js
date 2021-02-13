@@ -172,11 +172,11 @@ function Player({match}) {
             }
         }
     }, [data]);
-    if (loading) return 'Loading...';
+/*     if (loading) return 'Loading...';
 
     if (dataLoaded) {
         console.log(shotData)
-    }
+    } */
 
     return (
         <div className = "playerPageContainer">
