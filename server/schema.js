@@ -21,7 +21,6 @@ const GameID = "0021401082";
 var d = new Date();
 var currentDate = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear()
 
-var topCatStats = {}
 let statCats = [
     {
         cat:"PTS",
@@ -94,6 +93,60 @@ async function tempFunction() {
     //obj = tempObj
     return tempObj
 }
+
+const teamRosterEx = {
+    "name": "flare",
+    "children": [
+     {
+        "name": "cluster",
+        "children": [
+         {"name": "AgglomerativeCluster", "size": 3938},
+         {"name": "CommunityStructure", "size": 3812},
+         {"name": "HierarchicalCluster", "size": 6714},
+         {"name": "MergeEdge", "size": 743}
+        ]
+    }
+    ]
+}
+const teamRoster = {}
+let teamIdEx = [1610612760, 1610612764]
+//nba.stats.commonTeamRoster({TeamID: 1610612760}).then((data) => console.log(data['commonTeamRoster']))
+async function nbaTeamRoster(teamId) {
+        await nba.stats.commonTeamRoster({TeamID: teamId})
+        .then((data)=> {
+            teamRoster['children'].push({
+                name: getTeamName(teamId),
+                children: 
+                    data.commonTeamRoster.map((item) => ({
+                        name: item.player,
+                        playerId: item.playerId, 
+                        img: "https://ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/" + item.playerId  + ".png"
+                    }))
+            })
+        })
+        console.log(teamRoster['children'].children)
+        return teamRoster
+}
+
+function getTeamName(id) {
+    const team = nba.teams.find(function (t) {
+        return (
+          t.teamId === id
+        );
+      });
+      return team ? team.abbreviation : null;
+}
+
+async function getNbaTeamRoster() {
+    teamRoster["name"] = "Teams"
+    teamRoster["children"] = []
+    for (const team of nba.teams) {
+        await nbaTeamRoster(team.teamId)
+    }
+    return teamRoster
+}
+
+getNbaTeamRoster();
 
 const PlayerInfo =  new GraphQLObjectType({
     name: 'playerInfo',
@@ -894,6 +947,29 @@ const PlayerTracking = new GraphQLObjectType({
     })
 })
 
+const teamRosterGrouped = new GraphQLObjectType({
+    name: "teamRosterGrouped",
+    fields: () => ({
+        name: { type: GraphQLString },
+        children: { type: new GraphQLObjectType(rosterTeamInfo) },
+    })
+})
+
+const rosterTeamInfo = new GraphQLObjectType({
+    name: "rosterTeamInfo",
+    fields: () => ({
+        name: { type: GraphQLString },
+        children: { type: new GraphQLObjectType(rosterPlayerInfo) },
+    })
+})
+const rosterPlayerInfo = new GraphQLObjectType({
+    name: "rosterPlayerInfo",
+    fields: () => ({
+        name: { type: GraphQLString },
+        playerId: { type: GraphQLInt },
+        img: { type: GraphQLString }
+    })
+})
 
 
 // const Rankings = new GraphQLObjectType({
@@ -1083,6 +1159,10 @@ const RootQuery = new GraphQLObjectType({
             type: TopStats,
             resolve: () => tempFunction()
         }
+        // rosterInfoGrouped: {
+        //     type: teamRosterGrouped,
+        //     resolve: () => getNbaTeamRoster()
+        // }
         // rankings: {
         //     type: new GraphQLList(Rankings),
         //     resolve: () => nba.stats.playerProfile({ PlayerID: curry.playerId }).then((data) => data["seasonRankingsRegulatSeason"])
@@ -1096,12 +1176,13 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
 
 let listOfTracking = ["Drives", "CatchShoot", "Passing", "PullupShot", "Possessions", "Rebounding", "Defense","Efficiency", "SpeedDistance", "ElbowTouch", "PostTouch", "PaintTouch"]
-nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
-nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
-nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
+//nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
+//nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
+//nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
 //nba.stats.playByPlay({GameID: "0021401082"}).then((data) => console.log(data))
-nba.stats.shots({ PlayerID: 201939 }).then((data) => console.log(data['shot_Chart_Detail']))
-
+//nba.stats.shots({ PlayerID: 201939 }).then((data) => console.log(data['shot_Chart_Detail']))
+//nba.stats.commonTeamRoster({TeamID: 1610612760}).then((data) => console.log(data['commonTeamRoster']))
+//console.log(nba.teams)
 
 
 
