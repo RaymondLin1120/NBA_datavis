@@ -5,6 +5,7 @@ import RadarStats from '../../Components/Graphing/RadarStats'
 import SearchBar from '../../Components/SearchBar/SearchBar'
 import Boxscores from '../../Components/Graphing/Boxscores'
 import ShotChart from '../../Components/Graphing/ShotChart'
+import PlayerShotchart from './PlayerShotchart';
 import nba from 'nba';
 import { useParams } from 'react-router-dom'
 import { MdBlock } from 'react-icons/md';
@@ -189,6 +190,7 @@ function Player({match}) {
                     <RadarStats config = {seasonStats} statData = {topStats} style = {{height:'500px', width:'500px'}} size = {160}/>
                     <ShotChart shotData = {shotData} />
                     {/* <Boxscores data = {playerGames} /> */}
+                    <PlayerShotchart />
                 </div>
             </>}
             { error && id && <div> {error.message} </div>}
