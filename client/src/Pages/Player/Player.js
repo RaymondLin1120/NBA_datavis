@@ -6,6 +6,7 @@ import SearchBar from '../../Components/SearchBar/SearchBar'
 import Boxscores from '../../Components/Graphing/Boxscores'
 import ShotChart from '../../Components/Graphing/ShotChart'
 import Gauge from '../../Components/Graphing/Gauge'
+import PlayerShotchart from './PlayerShotchart';
 import nba from 'nba';
 import { useParams } from 'react-router-dom'
 import { MdBlock } from 'react-icons/md';

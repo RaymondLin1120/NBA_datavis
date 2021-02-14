@@ -50,22 +50,3 @@ export const Player_Query = gql`
         }
     }
 `
-leagueGameLog(playerId: $playerId) {
-  resource,
-  parameters {
-    LeagueID
-    Season
-    SeasonType
-    PlayerOrTeam
-    Counter
-    Sorter
-    Direction
-    DateFrom
-    DateTo
-  },
-  resultSets {
-    name
-    headers
-    rowSet
-  }
-}

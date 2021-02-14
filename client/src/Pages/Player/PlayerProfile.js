@@ -37,8 +37,6 @@ export default function PlayerProfile(props) {
     
     let cats = ['min', 'pts', 'reb', 'ast', 'stl', 'blk']
     let statData = props.seasonStats[0]
-    console.log(props.playerInfo)
-    console.log(props)
     return (
         <section className="playerInfo-container" style={{background: teamColor[props.playerInfo[0].teamAbbreviation.toLowerCase()], backgroundImage: `url(https://www.nba.com/stats/media/img/teams/logos/${props.playerInfo[0].teamAbbreviation}_logo.svg)`, backgroundRepeat: 'no-repeat', backgroundSize: "contain", backgroundAttachment: 'fixed', backgroundPosition: '0% 0%', backgroundBlendMode: "soft-light" }} >
 
