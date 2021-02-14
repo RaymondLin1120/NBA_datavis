@@ -401,7 +401,7 @@ const teamRoster1 = {
 export default function PlayerHome() {
     return (
         <div>
-            <CirclePacking data={teamRoster}/>
+            {/* <CirclePacking data={teamRoster}/> */}
         </div>
     )
 }

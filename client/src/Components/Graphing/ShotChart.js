@@ -1,33 +1,73 @@
-import React, { useRef, useState, useEffect } from 'react'
+// import React, { useRef, useState, useEffect } from 'react'
+// import * as d3 from 'd3'
+// import {court, shots} from 'd3-shotchart'
+// function ShotChart(props) {
 
-function ShotChart(props) {
+//     const svgRef = useRef()
 
-    const svgRef = useRef()
+//     //var playerArray = props.shotData.resultSets[0].rowSet;
+//     const final_shots = props.shotData.resultSets[0].rowSet.map(shot => ({
+//         x: (shot.locX + 250) / 10,
+//         y: (shot.locY + 50) / 10,
+//         action_type: shot.actionType,
+//         shot_distance: shot.shotDistance,
+//         shot_made_flag: shot.shotMadeFlag,
+//     }))
 
-    //var playerArray = props.shotData.resultSets[0].rowSet;
+//     useEffect(() => {
 
-    console.log(props.shotData)
-    var x = [];
-    var y = [];
-    var made = [];
-    var attempts = [];
+//     })
 
-    props.shotData.forEach(function(a){
-        x.push(a[a.length-4]);
-        y.push(a[a.length-3]);
-        made.push(a[a.length-1]);
-        attempts.push(a[a.length-2]);
-    })
+//     return (
+//         <div>
+//             Test
+//         </div>
+//     )
+// }
 
-    useEffect(() => {
+// export default ShotChart
+// import React from 'react';
+// import nba from 'nba';
+// import * as d3 from 'd3';
+// import { hexbin } from 'd3-hexbin';
+// import { court, shots } from 'd3-shotchart';
+// import PropTypes from 'prop-types';
 
-    })
+// window.d3_hexbin = {hexbin : hexbin}; // workaround library problem
 
-    return (
-        <div>
-            Test
-        </div>
-    )
-}
+// class ShotChart extends React.Component {
+//     // static propTypes = {
+//     //     playerId: PropTypes.number,
+//     //     minCount: PropTypes.number,
+//     //     chartType: PropTypes.string,
+//     //     displayTooltip: PropTypes.bool,
+//     // }
 
-export default ShotChart
+//     componentDidUpdate() {
+//         nba.stats.shots({
+//             PlayerID: 201143
+//         }).then((response) => {
+//             const final_shots = response.shot_Chart_Detail.map(shot => ({
+//                 x: (shot.locX + 250) / 10,
+//                 y: (shot.locY + 50) / 10,
+//                 action_type: shot.actionType,
+//                 shot_distance: shot.shotDistance,
+//                 shot_made_flag: shot.shotMadeFlag,
+//             }));
+
+//             const courtSelection = d3.select("#shot-chart");
+//             courtSelection.html('');
+//             const chart_court = court().width(500);
+//             const chart_shots = shots().shotRenderThreshold(2).displayToolTips(true).displayType('hexbin');
+//             courtSelection.call(chart_court);
+//             courtSelection.datum(final_shots).call(chart_shots);
+//         });
+//     }
+//     render() {
+//         return (
+//             <div id="shot-chart"></div>
+//         );
+//     }
+// }
+
+// export default ShotChart;

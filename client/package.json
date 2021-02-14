@@ -7,12 +7,12 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
-    "axios": "^0.21.1",
+    "antd": "^3.26.17",
     "d3": "^6.5.0",
-    "d3-shotchart": "0.0.2",
     "echarts": "^5.0.1",
     "file-loader": "^6.2.0",
     "graphql": "^15.5.0",
+    "lodash": "^4.17.15",
     "nba": "^4.14.0",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
@@ -22,6 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-table": "^7.6.3",
+    "react-table-scrollbar": "^0.1.9",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

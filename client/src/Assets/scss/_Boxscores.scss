@@ -1,7 +1,16 @@
 table {
   border-spacing: 0;
-  border: 1px solid black;
+  // border: 2px solid black;
+  // border-radius: 20px;
   font-size: 12px;
+  font-weight: 300;
+
+  thead {
+    background-color: #6d6d6d;
+    color: white;
+    font-size: 14px;
+    font-weight: 350;
+  }
   tr {
     :last-child {
       td {
@@ -10,17 +19,26 @@ table {
     }
   }
 
+  tr:nth-child(even) {
+    background-color: #dfdfdf;
+  }
+
   th,
   td {
     margin: 0;
-    padding: 0.5rem;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+    padding: 0.55rem;
+    // border-bottom: 1px solid black;
+    // border-right: 1px solid black;
 
     :last-child {
-      border-right: 0;
+      // border-right: 0;
+      border: 2px solid black;
     }
   }
+}
+
+.ReactTable .rt-tbody{
+  overflow: overlay;
 }
 
 .pagination {

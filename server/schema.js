@@ -9,7 +9,7 @@ const {
     GraphQLScalarType,
     GraphQLJSON,
     GraphQLBoolean
-    } = require('graphql');
+} = require('graphql');
 
 const nba = require('nba');
 
@@ -124,7 +124,6 @@ async function nbaTeamRoster(teamId) {
                     }))
             })
         })
-        console.log(teamRoster['children'].children)
         return teamRoster
 }
 
@@ -146,7 +145,7 @@ async function getNbaTeamRoster() {
     return teamRoster
 }
 
-getNbaTeamRoster();
+// getNbaTeamRoster();
 
 const PlayerInfo =  new GraphQLObjectType({
     name: 'playerInfo',
@@ -1121,7 +1120,6 @@ const RootQuery = new GraphQLObjectType({
         catchShoot: {
             type: new GraphQLList(catchShoot),
             resolve: ()=> nba.stats.playerTracking({PtMeasureType: "CatchShoot"}).then((data) => data.leagueDashPtStats)
-            
         },
         drives: {
             type: new GraphQLList(drives),
@@ -1176,6 +1174,7 @@ const RootQuery = new GraphQLObjectType({
 //nba.stats.scoreboard({ gameDate: currentDate}).then((data) => console.log(data))
 
 let listOfTracking = ["Drives", "CatchShoot", "Passing", "PullupShot", "Possessions", "Rebounding", "Defense","Efficiency", "SpeedDistance", "ElbowTouch", "PostTouch", "PaintTouch"]
+//nba.stats.playerSplits({ PlayerID: 201939 }).then((data)=> console.log(data))
 //nba.stats.playerTracking({PtMeasureType: "SpeedDistance"}).then((data) => console.log(data.leagueDashPtStats))
 //nba.stats.boxScoreSummary({GameID: "0021401082"}).then((data) => console.log(data.resultSets[8]))
 //nba.data.teamLeaders("2020", 1610612764).then((data) => console.log(data.league.standard))
@@ -1183,7 +1182,6 @@ let listOfTracking = ["Drives", "CatchShoot", "Passing", "PullupShot", "Possessi
 //nba.stats.shots({ PlayerID: 201939 }).then((data) => console.log(data['shot_Chart_Detail']))
 //nba.stats.commonTeamRoster({TeamID: 1610612760}).then((data) => console.log(data['commonTeamRoster']))
 //console.log(nba.teams)
-
 
 
 //Function for creating top 30, top 60, top 100

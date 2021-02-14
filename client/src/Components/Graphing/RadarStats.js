@@ -4,7 +4,6 @@ import Chart from './Chart'
 import EChart from './EChart.js'
 
 function RadarStats({ config, statData, resize , style, size}) {
-    console.log(statData)
     let option = {
       title: {
           text: 'Rankings',
