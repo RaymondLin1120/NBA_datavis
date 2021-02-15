@@ -9,11 +9,6 @@
     "@testing-library/user-event": "^12.6.2",
     "antd": "^3.26.17",
     "d3": "^6.5.0",
-<<<<<<< HEAD
-=======
-    "d3-hexbin": "^0.2.2",
-    "d3-shotchart": "0.0.2",
->>>>>>> 808486c7656f7bad3549aa62215caa36a30aa6f5
     "echarts": "^5.0.1",
     "file-loader": "^6.2.0",
     "graphql": "^15.5.0",

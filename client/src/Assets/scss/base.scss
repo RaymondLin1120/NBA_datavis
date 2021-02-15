@@ -1,37 +1,45 @@
-@import './Variables';
-@import './Boxscores';
-@import './Chart';
-@import './Games';
-@import './SearchBar';
-@import './Player';
-@import './Sidebar';
-@import './Post';
-@import './Post-Masonry';
-@import './Home';
+@import "./Variables";
+@import "./Boxscores";
+@import "./Chart";
+@import "./TeamSearchBar";
+@import "./Games";
+@import "./SearchBar";
+@import "./Player";
+@import "./Sidebar";
+@import "./Post";
+@import "./Post-Masonry";
+@import "./Home";
 
 body {
-    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    font-weight: 500;
-    margin: 0;
-    background-color: #f8f9fa;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  margin: 0;
+  background-color: #f8f9fa;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .row {
-    margin: 4em 20px;
+  margin: 4em 20px;
 }
 
-.overlay::before {    
-    z-index: 1;
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(180deg, transparent 0%, transparent 18%, rgba(0,0,0,0.8) 99%, rgba(0,0,0,0.8) 100%)
+.overlay::before {
+  z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 18%,
+    rgba(0, 0, 0, 0.8) 99%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
 }

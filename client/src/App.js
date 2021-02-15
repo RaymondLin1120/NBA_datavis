@@ -1,36 +1,37 @@
-import React from 'react'
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-import Sidebar from './Components/Sidebar/Sidebar'
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Sidebar from "./Components/Sidebar/Sidebar";
 import {
-   ApolloClient,
-    InMemoryCache, 
-    ApolloProvider, 
-    HttpLink, 
-    from
-  } from '@apollo/client';
-import {onError} from '@apollo/client/link/error'
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 
-import Home from './Pages/Home'
-import Player from './Pages/Player/Player'
-import Games from './Pages/Games/Games'
-import PlayerHome from './Pages/Player/PlayerHome';
+import Home from "./Pages/Home";
+import Player from "./Pages/Player/Player";
+import Games from "./Pages/Games/Games";
+import Team from "./Pages/Team/Team";
+import PlayerHome from "./Pages/Player/PlayerHome";
 
-const errorLink = onError(({ graphqlErrors, networkError}) => {
+const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
     graphqlErrors.map(({ message, location, path }) => {
       alert(`Graphql error ${message}`);
-    })
+    });
   }
-})
+});
 
 const link = from([
   errorLink,
-  new HttpLink({ uri:'http://localhost:8080/graphql' })
-])
+  new HttpLink({ uri: "http://localhost:8080/graphql" }),
+]);
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: link
+  link: link,
 });
 
 // const AUTH_TOKEN = "auth-token";
@@ -63,17 +64,18 @@ const client = new ApolloClient({
 
 function App() {
   return (
-    <ApolloProvider client = {client}>
+    <ApolloProvider client={client}>
       <Router>
         <div className="App">
-            <Sidebar />
-            <Switch>
-              <Route exact path='/Home' component = {Home} />
-              {/* <Route exact path='/Player' component = {PlayerHome} /> */}
-              <Route exact path='/Player/:id?' component = {Player} />
-              <Route exact path='/Games' component = {Games} />
-              <Route component={() => 404} />
-            </Switch>  
+          <Sidebar />
+          <Switch>
+            <Route exact path="/Home" component={Home} />
+            {/* <Route exact path='/Player' component = {PlayerHome} /> */}
+            <Route exact path="/Player/:id?" component={Player} />
+            <Route exact path="/Games" component={Games} />
+            <Route exact path="/Team-Comparison/:id" component={Team} />
+            <Route component={() => 404} />
+          </Switch>
         </div>
       </Router>
     </ApolloProvider>
